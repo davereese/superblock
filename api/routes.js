@@ -4,6 +4,11 @@ const utilties = require('./utilities');
 
 // connect to postgres
 
+// ping test
+router.get('/ping', (req, res) => {
+    res.status(200).json({message: 'pong!'});
+});
+
 // new users
 router.post('/users', async (req, res) => {});
 

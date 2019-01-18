@@ -10,11 +10,15 @@
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.3"
   },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "api": "nodemon ./api/api.js"
   },
   "eslintConfig": {
     "extends": "react-app"
