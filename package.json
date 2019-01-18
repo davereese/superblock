@@ -18,7 +18,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "api": "nodemon ./api/api.js"
+    "api-dev": "nodemon ./api/api.js",
+    "api-prod": "node ./api/api.js"
   },
   "eslintConfig": {
     "extends": "react-app"
