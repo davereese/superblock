@@ -1,12 +1,32 @@
 // COLORS
-$black:         #1b1b1b;
-$dark-gray:     #2e2e2e;
-$hurricane:     #434343;
-$stormy:        #494949;
-$overcast:      #a1a1a1;
-$white:         #fff;
-
-$minty:         #00ffd1;
+$black:                   #1b1b1b;
+$dark-gray:               #2e2e2e;
+$hurricane:               #434343;
+$stormy:                  #494949;
+$overcast:                #a1a1a1;
+$white:                   #fff;
+$minty:                   #00ffd1;
 
 // COLOR ASSIGNMENTS
-$body:          $dark-gray;
+// -layout
+$body-bg:                 $dark-gray;
+
+// -text
+$link-color:              $minty;
+$placeholder-color:       $overcast;
+$label-color:             $minty;
+
+// FONTS
+$base-font-size:          14px;
+$font-weight-light:       300;
+$font-weight-regular:     400;
+$font-weight-medium:      500;
+$font-weight-semibold:    600;
+$font-weight-bold:        700;
+
+// BREAKPOINTS
+$phone-max:               599px;
+$tablet-portrait:         600px;
+$tablet-landscape:        900px;
+$desktop:                 1200px;
+$big-desktop:             1800px;

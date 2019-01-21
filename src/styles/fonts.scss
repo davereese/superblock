@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+@import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css');
+
+@import './utilities.scss';
+@import './variables.scss';
+
+$poppins: 'Poppins', sans-serif;
+$fira-code: 'Fira Mono', monospace;
+
+.header-lg {
+  font-family: $poppins;
+  font-size: px-to-rem(18px);
+  font-weight: $font-weight-regular;
+}
+
+.header-sm {
+  font-family: $poppins;
+  font-size: px-to-rem(12px);
+  font-weight: $font-weight-medium;
+}
+
+.legal {
+  font-family: $poppins;
+  font-size: px-to-rem(11px);
+  font-weight: $font-weight-regular;
+}
+
+.tag {
+  @extend .legal;
+  letter-spacing: px-to-rem(1px);
+}
+
+.label {
+  @extend .tag;
+  text-transform: uppercase;
+}
+
+.code {
+  font-family: $fira-code;
+  font-size: px-to-rem(14px);
+  line-height: 1.5;
+}
