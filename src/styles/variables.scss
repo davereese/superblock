@@ -5,16 +5,27 @@ $hurricane:               #434343;
 $stormy:                  #494949;
 $overcast:                #a1a1a1;
 $white:                   #fff;
+
 $minty:                   #00ffd1;
+$canary:                  #ffe600;
+$brick:                   #f14a29;
+$rosey:                   #C6538C;
+$bluebird:                #56CCF2;
 
 // COLOR ASSIGNMENTS
 // -layout
 $body-bg:                 $dark-gray;
-
+$highlight-color:         $minty;
 // -text
 $link-color:              $minty;
 $placeholder-color:       $overcast;
 $label-color:             $minty;
+$text-dark:               $black;
+// -assets
+$js-yellow:               $canary;
+$sass-pink:               $rosey;
+$css-blue:                $bluebird;
+$html-red:                $brick;
 
 // FONTS
 $base-font-size:          14px;

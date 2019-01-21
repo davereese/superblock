@@ -4,11 +4,11 @@ import './styles/App.scss';
 
 class App extends Component {
   render() {
-    let tempLogo = {
+    const tempLogo = {
       display: 'block',
       margin: '0 auto',
       marginTop: '45vh',
-      width: '300px'
+      width: '300px',
     };
 
     return (
