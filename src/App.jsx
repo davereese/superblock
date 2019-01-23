@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './styles/App.scss';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import logo from './resources/images/logo.svg';
+import './App.scss';
+import Editing from './views/Editing/Editing';
 
 class App extends Component {
   render() {
-    const tempLogo = {
-      display: 'block',
-      margin: '0 auto',
-      marginTop: '45vh',
-      width: '300px',
-    };
-
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" style={tempLogo} />
-        </header>
+      <div className="app">
+        <Router>
+          <React.Fragment>
+            <header>
+              <img src={logo} className="logo" alt="logo" />
+            </header>
+            <div className="main">
+              <Route path="/" exact component={Editing} />
+            </div>
+          </React.Fragment>
+        </Router>
       </div>
     );
   }

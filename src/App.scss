@@ -1,0 +1,33 @@
+@import './styles/variables.scss';
+@import './styles/utilities.scss';
+
+.app {
+  header {
+    position: fixed;
+    z-index: 10;
+    box-sizing: border-box;
+    display: flex;
+    padding: 0 20px;
+    height: 77px;
+    width: 100%;
+    align-items: center;
+    background-color: $body-bg;
+
+    .logo {
+      width: 153px;
+      height: 33px;
+    }
+  }
+
+  .main {
+    position: relative;
+    z-index: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 25% 75%;
+    padding: 97px 20px 0;
+    margin: 0 auto;
+    max-width: 1600px;
+  }
+}
