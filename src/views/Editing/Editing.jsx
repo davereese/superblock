@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Editor from '../../components/Editor/Editor'
+
 class Editing extends React.Component {
   render() {
     return (
@@ -8,7 +10,7 @@ class Editing extends React.Component {
           Sidebar
         </div>
         <div className="content">
-          Content
+          <Editor />
         </div>
       </React.Fragment>
     );
