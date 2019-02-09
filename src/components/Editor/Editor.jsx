@@ -13,7 +13,8 @@ class Editor extends React.Component {
     this.state = {
       textarea: '',
       height: 600,
-      metaDown: false
+      metaDown: false,
+      shiftDown: false,
     }
     this.textareaRef = React.createRef();
   }
@@ -36,7 +37,7 @@ class Editor extends React.Component {
       if (selectionStartLine === selectionEndLine && !override) {
         // single line
         newContent = oldContent.substring( 0, selectionStartPos ) + "  " +
-        oldContent.substring( selectionEndPos );
+          oldContent.substring( selectionEndPos );
       } else {
         // selection
         let linesArray = oldContent.split('\n');
@@ -93,15 +94,20 @@ class Editor extends React.Component {
       // Do some fancy stuff if any of these keys are pressed and held down
       if (e.key === 'Shift' || e.key === 'Meta' || e.key === 'Control') {
         e.preventDefault();
-        this.setState({metaDown: true});
+        if (e.key === 'Meta' || e.key === 'Control') {
+          this.setState({metaDown: true});
+        } else if (e.key === 'Shift') {
+          this.setState({shiftDown: true});
+        }
       } else if (this.state.metaDown) {
-        if (e.key === 'Tab' || e.keyCode === 219) {
+        if (e.keyCode === 219) {
           // We're trying to outdent
           e.preventDefault();
           newContent = outdentContent(e, selectionStartLine, selectionEndLine);
           e.target.value = newContent;
           // Retain the selection
-          e.target.selectionStart = selectionStartPos;
+          const selectionAdjustment = outdentLines > 0 ? 2 : 0;
+          e.target.selectionStart = selectionStartPos - selectionAdjustment;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         } else if (e.keyCode === 221) {
           // We're trying to indent
@@ -117,8 +123,18 @@ class Editor extends React.Component {
           );
           e.target.value = newContent;
           // Retain the selection
-          e.target.selectionStart = selectionStartPos + indents;
+          e.target.selectionStart = selectionStartPos + 2;
           e.target.selectionEnd = selectionEndPos + indents;
+        }
+      } else if (this.state.shiftDown) {
+        if (e.key === 'Tab') {
+          // We're trying to outdent
+          e.preventDefault();
+          newContent = outdentContent(e, selectionStartLine, selectionEndLine);
+          e.target.value = newContent;
+          // Retain the selection
+          e.target.selectionStart = selectionStartPos;
+          e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         }
       } else if (e.key === 'Tab') {
         // indent if we just hit tab key
@@ -142,12 +158,38 @@ class Editor extends React.Component {
           e.target.selectionEnd = selectionEndPos + indents;
         }
       }
+
+      // handle the enter key
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const oldContent = e.target.value;
+        const contentArray = e.target.value.split('\n');
+
+        // search the string for the amount of whitespace it has and mimic
+        let numberOfSpaces = contentArray[selectionStartLine - 1].search(/\S|$/);
+        const spacesString = contentArray[selectionStartLine - 1].substr(0, numberOfSpaces);
+
+        // check if the line above ends with '{' and indent more on the new line
+        const openBracketSpace = contentArray[selectionStartLine - 1].slice(-1) === '{' ? '  ' : '';
+        numberOfSpaces = openBracketSpace.length === 2 ? (numberOfSpaces + 2) : numberOfSpaces;
+
+        newContent = oldContent.substring( 0, selectionStartPos ) + '\n' + spacesString +
+          openBracketSpace + oldContent.substring( selectionEndPos );
+
+        e.target.value = newContent;
+        // set caret pos
+        e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 1 + numberOfSpaces;
+      }
+
+      // trigger the syntax highlighting
       textareaChange(e);
     }
 
     const handleKeyUp = (e) => {
-      if (e.key === 'Shift' || e.key === 'Meta' || e.key === 'Control') {
+      if (e.key === 'Meta' || e.key === 'Control') {
         this.setState({metaDown: false});
+      } else if (e.key === 'Shift') {
+        this.setState({shiftDown: false});
       }
     }
 
