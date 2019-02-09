@@ -37,6 +37,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Back End
 
+### Config
+You will need to set an environment variable to allow the JWT package to sign/verify tokens.  It can be whatever you want for local development, just make sure that it's called `SUPERBLOCK_SECRET`.
+
 ### `yarn run api-dev`
 
 Runs the Express API in development mode.  Saved changes will trigger a reboot.
