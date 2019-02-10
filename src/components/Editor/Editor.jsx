@@ -2,10 +2,7 @@ import * as React from 'react';
 import './Editor.scss';
 import Prism from 'prismjs';
 import LineNumbers from './LineNumbers';
-
-function getLineNumber(value, caret) {
-  return value.substr(0, caret).split("\n").length;
-}
+import * as editor from './editorFunctions.js';
 
 class Editor extends React.Component {
   constructor(props) {
@@ -20,59 +17,8 @@ class Editor extends React.Component {
   }
 
   render() {
-    // don't want this to be in state so it updates immediately
+    // don't want this to be in state so it updates immedately
     let outdentLines = 0;
-
-    const indentContent = (
-      e,
-      selectionStartPos,
-      selectionStartLine,
-      selectionEndPos,
-      selectionEndLine,
-      override = false
-    ) => {
-      const oldContent = e.target.value;
-      let newContent;
-      // Set the new content
-      if (selectionStartLine === selectionEndLine && !override) {
-        // single line
-        newContent = oldContent.substring( 0, selectionStartPos ) + "  " +
-          oldContent.substring( selectionEndPos );
-      } else {
-        // selection
-        let linesArray = oldContent.split('\n');
-        linesArray = linesArray.map((line, i) => {
-          if (i >= selectionStartLine - 1 && i <= selectionEndLine - 1) {
-            line = '  ' + line;
-          }
-          return line;
-        });
-        newContent = linesArray.join('\n');
-      }
-
-      return newContent;
-    }
-
-    const outdentContent = (
-      e,
-      selectionStartLine,
-      selectionEndLine,
-    ) => {
-      const oldContent = e.target.value;
-      let newContent;
-      let linesArray = oldContent.split('\n');
-      linesArray = linesArray.map((line, i) => {
-        if (i >= selectionStartLine - 1 && i <= selectionEndLine - 1) {
-          if (line.search(/^\s\s/) !== -1) {
-            outdentLines = outdentLines + 1;
-          }
-          line = line.replace(/^\s\s/, '');
-        }
-        return line;
-      });
-      newContent = linesArray.join('\n');
-      return newContent;
-    }
 
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
@@ -85,9 +31,9 @@ class Editor extends React.Component {
 
     const handleKeyDown = (e) => {
       const selectionStartPos = e.target.selectionStart;
-      const selectionStartLine = getLineNumber(e.target.value, selectionStartPos);
+      const selectionStartLine = editor.getLineNumber(e.target.value, selectionStartPos);
       const selectionEndPos = e.target.selectionEnd;
-      const selectionEndLine = getLineNumber(e.target.value, selectionEndPos);
+      const selectionEndLine = editor.getLineNumber(e.target.value, selectionEndPos);
       const indents = (selectionEndLine - selectionStartLine) * 2 + 2;
       let newContent;
 
@@ -103,17 +49,23 @@ class Editor extends React.Component {
         if (e.keyCode === 219) {
           // We're trying to outdent
           e.preventDefault();
-          newContent = outdentContent(e, selectionStartLine, selectionEndLine);
+          newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
+
+          // we need to know if the first line changes, if so add 2
+          const change = editor.firstLineChanged(e.target.value, newContent, selectionStartLine);
+          // number of lines changed to move the end position
+          outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
+
           e.target.value = newContent;
-          // Retain the selection
-          const selectionAdjustment = outdentLines > 0 ? 2 : 0;
+          // Retain the selection / set the caret
+          const selectionAdjustment = change ? 2 : 0;
           e.target.selectionStart = selectionStartPos - selectionAdjustment;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         } else if (e.keyCode === 221) {
           // We're trying to indent
           e.preventDefault();
           const override = true;
-          newContent = indentContent(
+          newContent = editor.indentContent(
             e,
             selectionStartPos,
             selectionStartLine,
@@ -122,7 +74,7 @@ class Editor extends React.Component {
             override
           );
           e.target.value = newContent;
-          // Retain the selection
+          // Retain the selection / set the caret
           e.target.selectionStart = selectionStartPos + 2;
           e.target.selectionEnd = selectionEndPos + indents;
         }
@@ -130,16 +82,20 @@ class Editor extends React.Component {
         if (e.key === 'Tab') {
           // We're trying to outdent
           e.preventDefault();
-          newContent = outdentContent(e, selectionStartLine, selectionEndLine);
+          newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
+
+          // number of lines changed to move the end position
+          outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
+
           e.target.value = newContent;
-          // Retain the selection
+          // Retain the selection / set the caret
           e.target.selectionStart = selectionStartPos;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         }
       } else if (e.key === 'Tab') {
         // indent if we just hit tab key
         e.preventDefault();
-        newContent = indentContent(
+        newContent = editor.indentContent(
           e,
           selectionStartPos,
           selectionStartLine,
@@ -148,12 +104,12 @@ class Editor extends React.Component {
         );
         e.target.value = newContent;
         if (selectionStartLine === selectionEndLine) {
-          // single line - Set the new cursor position - current position + 2 to
+          // single line - Set the new caret position - current position + 2 to
           // account for the new tab (doube space)
           e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 2;
         } else {
           // selection
-          // Retain the selection
+          // Retain the selection / set the caret
           e.target.selectionStart = selectionStartPos;
           e.target.selectionEnd = selectionEndPos + indents;
         }
@@ -162,19 +118,12 @@ class Editor extends React.Component {
       // handle the enter key
       if (e.key === 'Enter') {
         e.preventDefault();
+        const spaces = editor.indentNewLine(e.target.value, selectionStartLine);
+        const numberOfSpaces = spaces.search(/\S|$/);
         const oldContent = e.target.value;
-        const contentArray = e.target.value.split('\n');
 
-        // search the string for the amount of whitespace it has and mimic
-        let numberOfSpaces = contentArray[selectionStartLine - 1].search(/\S|$/);
-        const spacesString = contentArray[selectionStartLine - 1].substr(0, numberOfSpaces);
-
-        // check if the line above ends with '{' and indent more on the new line
-        const openBracketSpace = contentArray[selectionStartLine - 1].slice(-1) === '{' ? '  ' : '';
-        numberOfSpaces = openBracketSpace.length === 2 ? (numberOfSpaces + 2) : numberOfSpaces;
-
-        newContent = oldContent.substring( 0, selectionStartPos ) + '\n' + spacesString +
-          openBracketSpace + oldContent.substring( selectionEndPos );
+        newContent = oldContent.substring( 0, selectionStartPos ) + '\n' + spaces +
+          oldContent.substring( selectionEndPos );
 
         e.target.value = newContent;
         // set caret pos
