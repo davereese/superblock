@@ -15,15 +15,17 @@ export const getNumberOfLinesChanged = (oldContent, newContent) => {
   return differences;
 }
 
-export const firstLineChanged = (oldContent, newContent, index) => {
+export const firstLineChange = (oldContent, index, selectionStartPos) => {
   const oldContentArray = oldContent.split('\n');
-  const newContentArray = newContent.split('\n');
-  let difference = false;
-  if (oldContentArray[index - 1] !== newContentArray[index - 1]) {
-    difference = true;
+  const firstLineFromCaret = oldContent.substr(selectionStartPos).split("\n")[0];
+  let wholeLineSelected = true;
+  // Check to see if the selected portion of the first line changed includes all
+  // of the line or not. If it doesn't
+  if (oldContentArray[index - 1] !== firstLineFromCaret) {
+    wholeLineSelected = false;
   }
 
-  return difference;
+  return wholeLineSelected;
 }
 
 export const indentContent = (

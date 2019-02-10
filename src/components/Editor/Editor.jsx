@@ -46,21 +46,30 @@ class Editor extends React.Component {
           this.setState({shiftDown: true});
         }
       } else if (this.state.metaDown) {
+
+        /** HANDLE { KEY **/
         if (e.keyCode === 219) {
           // We're trying to outdent
           e.preventDefault();
           newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
 
-          // we need to know if the first line changes, if so add 2
-          const change = editor.firstLineChanged(e.target.value, newContent, selectionStartLine);
-          // number of lines changed to move the end position
+          // Check if the beginning of the selection is at the beginning of the line
+          // If not, subtract 2 from the selection
+          const change = editor.firstLineChange(
+            e.target.value,
+            selectionStartLine,
+            selectionStartPos
+          );
+          // Get the number of lines changed to move the end position of the selection
           outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
 
           e.target.value = newContent;
           // Retain the selection / set the caret
-          const selectionAdjustment = change ? 2 : 0;
+          const selectionAdjustment = change ? 0 : 2;
           e.target.selectionStart = selectionStartPos - selectionAdjustment;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
+
+        /** HANDLE } KEY **/
         } else if (e.keyCode === 221) {
           // We're trying to indent
           e.preventDefault();
@@ -75,18 +84,25 @@ class Editor extends React.Component {
           );
           e.target.value = newContent;
           // Retain the selection / set the caret
-          e.target.selectionStart = selectionStartPos + 2;
+          e.target.selectionStart = selectionStartPos;
           e.target.selectionEnd = selectionEndPos + indents;
         }
       } else if (this.state.shiftDown) {
+
+        /** HANDLE TAB KEY SCEANRIO 1 **/
         if (e.key === 'Tab') {
           // We're trying to outdent
           e.preventDefault();
           newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
 
-          // we need to know if the first line changes, if so add 2
-          const change = editor.firstLineChanged(e.target.value, newContent, selectionStartLine);
-          // number of lines changed to move the end position
+          // Check if the beginning of the selection is at the beginning of the line
+          // If not, subtract 2 from the selection
+          const change = editor.firstLineChange(
+            e.target.value,
+            selectionStartLine,
+            selectionStartPos
+          );
+          // Get the number of lines changed to move the end position of the selection
           outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
 
           e.target.value = newContent;
@@ -95,6 +111,8 @@ class Editor extends React.Component {
           e.target.selectionStart = selectionStartPos - selectionAdjustment;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         }
+
+      /** HANDLE TAB KEY SCEANRIO 2 **/
       } else if (e.key === 'Tab') {
         // indent if we just hit tab key
         e.preventDefault();
@@ -111,14 +129,13 @@ class Editor extends React.Component {
           // account for the new tab (doube space)
           e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 2;
         } else {
-          // selection
           // Retain the selection / set the caret
           e.target.selectionStart = selectionStartPos;
           e.target.selectionEnd = selectionEndPos + indents;
         }
       }
 
-      // handle the enter key
+      /** HANDLE ENTER/RETURN KEY **/
       if (e.key === 'Enter') {
         e.preventDefault();
         const spaces = editor.indentNewLine(e.target.value, selectionStartLine);
@@ -129,7 +146,7 @@ class Editor extends React.Component {
           oldContent.substring( selectionEndPos );
 
         e.target.value = newContent;
-        // set caret pos
+        // set caret position
         e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 1 + numberOfSpaces;
       }
 
