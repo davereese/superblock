@@ -84,12 +84,15 @@ class Editor extends React.Component {
           e.preventDefault();
           newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
 
+          // we need to know if the first line changes, if so add 2
+          const change = editor.firstLineChanged(e.target.value, newContent, selectionStartLine);
           // number of lines changed to move the end position
           outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
 
           e.target.value = newContent;
           // Retain the selection / set the caret
-          e.target.selectionStart = selectionStartPos;
+          const selectionAdjustment = change ? 2 : 0;
+          e.target.selectionStart = selectionStartPos - selectionAdjustment;
           e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
         }
       } else if (e.key === 'Tab') {
