@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const utilties = require('./utilities');
+const config = require('./config');
 
 // connect to postgres
-const knex = require('knex')({
-    client: 'pg',
-    connection: {
-      host : '127.0.0.1',
-      user : 'tylerburkhardt',
-      database : 'superblock'
-    },
-});
+const knex = require('knex')(config.knexConfig);
 
 // ping test
 router.get('/ping', (req, res) => {
