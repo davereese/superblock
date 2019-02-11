@@ -15,7 +15,7 @@
 
   &__lines-container {
     position: relative;
-    padding: 20px 20px 20px 0;
+    padding: 20px 0;
     width: 100%;
     height: auto;
     min-height: 100%;
@@ -27,9 +27,10 @@
   &__line {
     z-index: 1;
     position: relative;
-    padding: 0 0 0 60px;
+    padding: 0 20px 0 60px;
     outline: none;
     color: $text-light;
+    transition: background-color 0.2s;
 
     &::before {
       counter-increment: editor;
@@ -39,6 +40,10 @@
       width: 40px;
       text-align: right;
       color: $placeholder-color;
+    }
+
+    &.focus {
+      background-color: $line-number-bg;
     }
 
     pre {

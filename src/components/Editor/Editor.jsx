@@ -10,6 +10,7 @@ class Editor extends React.Component {
     this.state = {
       textarea: '',
       height: 600,
+      focusLine: null,
       metaDown: false,
       shiftDown: false,
     }
@@ -27,6 +28,18 @@ class Editor extends React.Component {
         this.setState({height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1});
         Prism.highlightAll();
       });
+      // set focus
+      handleFocus(e);
+    }
+
+    const handleFocus = (e) => {
+      const selectionStartLine = editor.getLineNumber(e.target.value, e.target.selectionStart);
+      const selectionEndLine = editor.getLineNumber(e.target.value, e.target.selectionEnd);
+      if (selectionStartLine === selectionEndLine) {
+        this.setState({focusLine: selectionStartLine});
+      } else {
+        this.setState({focusLine: null});
+      }
     }
 
     const handleKeyDown = (e) => {
@@ -162,6 +175,7 @@ class Editor extends React.Component {
       }
     }
 
+    /** DYNAMIC STYLES **/
     const textareaHeight = {
       height: `${this.state.height}px`,
     };
@@ -180,8 +194,12 @@ class Editor extends React.Component {
           onChange={textareaChange}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
+          onClick={handleFocus}
         />
-        <LineNumbers text={this.state.textarea} />
+        <LineNumbers
+          text={this.state.textarea}
+          focus={this.state.focusLine}
+        />
       </div>
     );
   }
