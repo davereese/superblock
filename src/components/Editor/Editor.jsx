@@ -18,9 +18,6 @@ class Editor extends React.Component {
   }
 
   render() {
-    // don't want this to be in state so it updates immedately
-    let outdentLines = 0;
-
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
         const newHeight = this.textareaRef.current.nextSibling.clientHeight;
@@ -43,7 +40,7 @@ class Editor extends React.Component {
 
     const handleKeyDown = (e) => {
       const caret = editor.getCaretPosition(e);
-      const indents = (caret.selectionEndLine - caret.selectionStartLine) * 2 + 2;
+      const oldContent = JSON.parse(JSON.stringify(e.target.value));
       let newContent;
 
       // Do some fancy stuff if any of these keys are pressed and held down
@@ -61,18 +58,9 @@ class Editor extends React.Component {
           // We're trying to outdent
           e.preventDefault();
           newContent = editor.outdentContent(e, caret);
-
-          // Check if the beginning of the selection is at the beginning of the line
-          // If not, subtract 2 from the selection
-          const change = editor.firstLineChange(e.target.value, caret);
-          // Get the number of lines changed to move the end position of the selection
-          outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
-
           e.target.value = newContent;
           // Retain the selection / set the caret
-          const selectionAdjustment = change ? 0 : 2;
-          e.target.selectionStart = caret.selectionStartPos - selectionAdjustment;
-          e.target.selectionEnd = caret.selectionEndPos - (outdentLines * 2);
+          e.target = editor.setCaretOrSelection('outdent', e.target, oldContent, newContent, caret);
 
         /** HANDLE } KEY **/
         } else if (e.keyCode === 221) {
@@ -82,8 +70,7 @@ class Editor extends React.Component {
           newContent = editor.indentContent(e, caret, override);
           e.target.value = newContent;
           // Retain the selection / set the caret
-          e.target.selectionStart = caret.selectionStartPos;
-          e.target.selectionEnd = caret.selectionEndPos + indents;
+          e.target = editor.setCaretOrSelection('indent', e.target, oldContent, newContent, caret);
         }
       } else if (this.state.shiftDown) {
 
@@ -92,18 +79,9 @@ class Editor extends React.Component {
           // We're trying to outdent
           e.preventDefault();
           newContent = editor.outdentContent(e, caret);
-
-          // Check if the beginning of the selection is at the beginning of the line
-          // If not, subtract 2 from the selection
-          const change = editor.firstLineChange(e.target.value, caret);
-          // Get the number of lines changed to move the end position of the selection
-          outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
-
           e.target.value = newContent;
           // Retain the selection / set the caret
-          const selectionAdjustment = change ? 2 : 0;
-          e.target.selectionStart = caret.selectionStartPos - selectionAdjustment;
-          e.target.selectionEnd = caret.selectionEndPos - (outdentLines * 2);
+          e.target = editor.setCaretOrSelection('outdent', e.target, oldContent, newContent, caret);
         }
 
       /** HANDLE TAB KEY SCEANRIO 2 **/
@@ -112,15 +90,8 @@ class Editor extends React.Component {
         e.preventDefault();
         newContent = editor.indentContent(e, caret);
         e.target.value = newContent;
-        if (caret.selectionStartLine === caret.selectionEndLine) {
-          // single line - Set the new caret position - current position + 2 to
-          // account for the new tab (doube space)
-          e.target.selectionStart = e.target.selectionEnd = caret.selectionStartPos + 2;
-        } else {
-          // Retain the selection / set the caret
-          e.target.selectionStart = caret.selectionStartPos;
-          e.target.selectionEnd = caret.selectionEndPos + indents;
-        }
+        // Retain the selection / set the caret
+        e.target = editor.setCaretOrSelection('indent', e.target, oldContent, newContent, caret);
       }
 
       /** HANDLE ENTER/RETURN KEY **/
