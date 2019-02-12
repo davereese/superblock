@@ -33,21 +33,17 @@ class Editor extends React.Component {
     }
 
     const handleFocus = (e) => {
-      const selectionStartLine = editor.getLineNumber(e.target.value, e.target.selectionStart);
-      const selectionEndLine = editor.getLineNumber(e.target.value, e.target.selectionEnd);
-      if (selectionStartLine === selectionEndLine) {
-        this.setState({focusLine: selectionStartLine});
+      const caret = editor.getCaretPosition(e);
+      if (caret.selectionStartLine === caret.selectionEndLine) {
+        this.setState({focusLine: caret.selectionStartLine});
       } else {
         this.setState({focusLine: null});
       }
     }
 
     const handleKeyDown = (e) => {
-      const selectionStartPos = e.target.selectionStart;
-      const selectionStartLine = editor.getLineNumber(e.target.value, selectionStartPos);
-      const selectionEndPos = e.target.selectionEnd;
-      const selectionEndLine = editor.getLineNumber(e.target.value, selectionEndPos);
-      const indents = (selectionEndLine - selectionStartLine) * 2 + 2;
+      const caret = editor.getCaretPosition(e);
+      const indents = (caret.selectionEndLine - caret.selectionStartLine) * 2 + 2;
       let newContent;
 
       // Do some fancy stuff if any of these keys are pressed and held down
@@ -64,41 +60,30 @@ class Editor extends React.Component {
         if (e.keyCode === 219) {
           // We're trying to outdent
           e.preventDefault();
-          newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
+          newContent = editor.outdentContent(e, caret);
 
           // Check if the beginning of the selection is at the beginning of the line
           // If not, subtract 2 from the selection
-          const change = editor.firstLineChange(
-            e.target.value,
-            selectionStartLine,
-            selectionStartPos
-          );
+          const change = editor.firstLineChange(e.target.value, caret);
           // Get the number of lines changed to move the end position of the selection
           outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
 
           e.target.value = newContent;
           // Retain the selection / set the caret
           const selectionAdjustment = change ? 0 : 2;
-          e.target.selectionStart = selectionStartPos - selectionAdjustment;
-          e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
+          e.target.selectionStart = caret.selectionStartPos - selectionAdjustment;
+          e.target.selectionEnd = caret.selectionEndPos - (outdentLines * 2);
 
         /** HANDLE } KEY **/
         } else if (e.keyCode === 221) {
           // We're trying to indent
           e.preventDefault();
           const override = true;
-          newContent = editor.indentContent(
-            e,
-            selectionStartPos,
-            selectionStartLine,
-            selectionEndPos,
-            selectionEndLine,
-            override
-          );
+          newContent = editor.indentContent(e, caret, override);
           e.target.value = newContent;
           // Retain the selection / set the caret
-          e.target.selectionStart = selectionStartPos;
-          e.target.selectionEnd = selectionEndPos + indents;
+          e.target.selectionStart = caret.selectionStartPos;
+          e.target.selectionEnd = caret.selectionEndPos + indents;
         }
       } else if (this.state.shiftDown) {
 
@@ -106,61 +91,51 @@ class Editor extends React.Component {
         if (e.key === 'Tab') {
           // We're trying to outdent
           e.preventDefault();
-          newContent = editor.outdentContent(e, selectionStartLine, selectionEndLine);
+          newContent = editor.outdentContent(e, caret);
 
           // Check if the beginning of the selection is at the beginning of the line
           // If not, subtract 2 from the selection
-          const change = editor.firstLineChange(
-            e.target.value,
-            selectionStartLine,
-            selectionStartPos
-          );
+          const change = editor.firstLineChange(e.target.value, caret);
           // Get the number of lines changed to move the end position of the selection
           outdentLines = editor.getNumberOfLinesChanged(e.target.value, newContent);
 
           e.target.value = newContent;
           // Retain the selection / set the caret
           const selectionAdjustment = change ? 2 : 0;
-          e.target.selectionStart = selectionStartPos - selectionAdjustment;
-          e.target.selectionEnd = selectionEndPos - (outdentLines * 2);
+          e.target.selectionStart = caret.selectionStartPos - selectionAdjustment;
+          e.target.selectionEnd = caret.selectionEndPos - (outdentLines * 2);
         }
 
       /** HANDLE TAB KEY SCEANRIO 2 **/
       } else if (e.key === 'Tab') {
         // indent if we just hit tab key
         e.preventDefault();
-        newContent = editor.indentContent(
-          e,
-          selectionStartPos,
-          selectionStartLine,
-          selectionEndPos,
-          selectionEndLine
-        );
+        newContent = editor.indentContent(e, caret);
         e.target.value = newContent;
-        if (selectionStartLine === selectionEndLine) {
+        if (caret.selectionStartLine === caret.selectionEndLine) {
           // single line - Set the new caret position - current position + 2 to
           // account for the new tab (doube space)
-          e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 2;
+          e.target.selectionStart = e.target.selectionEnd = caret.selectionStartPos + 2;
         } else {
           // Retain the selection / set the caret
-          e.target.selectionStart = selectionStartPos;
-          e.target.selectionEnd = selectionEndPos + indents;
+          e.target.selectionStart = caret.selectionStartPos;
+          e.target.selectionEnd = caret.selectionEndPos + indents;
         }
       }
 
       /** HANDLE ENTER/RETURN KEY **/
       if (e.key === 'Enter') {
         e.preventDefault();
-        const spaces = editor.indentNewLine(e.target.value, selectionStartLine);
+        const spaces = editor.indentNewLine(e.target.value, caret);
         const numberOfSpaces = spaces.search(/\S|$/);
         const oldContent = e.target.value;
 
-        newContent = oldContent.substring( 0, selectionStartPos ) + '\n' + spaces +
-          oldContent.substring( selectionEndPos );
+        newContent = oldContent.substring( 0, caret.selectionStartPos ) + '\n' + spaces +
+          oldContent.substring( caret.selectionEndPos );
 
         e.target.value = newContent;
         // set caret position
-        e.target.selectionStart = e.target.selectionEnd = selectionStartPos + 1 + numberOfSpaces;
+        e.target.selectionStart = e.target.selectionEnd = caret.selectionStartPos + 1 + numberOfSpaces;
       }
 
       // trigger the syntax highlighting
