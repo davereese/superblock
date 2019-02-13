@@ -8,7 +8,7 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      textarea: '',
+      textarea: props.blockContent,
       height: 600,
       focusLine: null,
       metaDown: false,
