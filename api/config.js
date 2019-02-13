@@ -1,8 +1,1 @@
-exports.knexConfig = {
-    client: 'pg',
-    connection: {
-      host : '127.0.0.1',
-      user : 'tylerburkhardt',
-      database : 'superblock'
-    },
-};
+exports.DEFAULT_ERROR_CODE = 500;

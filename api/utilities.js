@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const defaultErrorCode = require('./config').DEFAULT_ERROR_CODE;
 
 exports.generateToken = (payload) => {
   const secret = process.env.SUPERBLOCK_SECRET;
@@ -13,9 +14,9 @@ exports.hashPassword = async (password) => {
 
 exports.checkPassword = async (password, hash) => {
   const valid = await bcrypt.compare(password, hash);
-  if (valid) {
-    return Promise.resolve(true);
-  } else {
-      return Promise.reject(false);
-  }
+  return valid ? Promise.resolve() : Promise.reject();
+}
+
+exports.returnError = (response, error, code=defaultErrorCode) => {
+  return response.status(code).json({ message: error });
 }
