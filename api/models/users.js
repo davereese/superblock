@@ -4,10 +4,17 @@ const utilities = require('../utilities');
 module.exports = class Users {
   
   static async list() {
-    const users = await knex.select().table('users')
+    const users = await knex('users')
       .catch(() => Promise.reject('Failed to get users from db'));
     
     return Promise.resolve(users);
+  }
+
+  static async search(username) {
+    const user = await knex('users').where('username', username)
+      .catch(() => Promise.reject(`Couldn't find user: ${username}`));
+
+    return Promise.resolve(user);
   }
 
   static async create(request) {

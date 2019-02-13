@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const utilities = require('./utilities');
 const Users = require('./models/users');
@@ -7,6 +8,41 @@ const Users = require('./models/users');
 router.get('/ping', (req, res) => {
   return res.status(200).json({ message: 'pong!' });
 });
+
+// authenticate
+router.post('/login', async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  
+  const user = await Users.search(username)
+    .catch(error => utilities.returnError(res, error, 401));
+  if (user) {
+    
+    const valid = utilities.checkPassword(password, user.password);
+    if (valid) {
+      const payload = { username: user.username };
+      const token = utilities.generateToken(payload);
+      return res.status(200).json({ token: token });
+    } else {
+      return utilities.returnError(res, 'Invalid password', 401);
+    }
+  }
+});
+
+// add authentication middleware for all other routes
+router.use((req, res, next) => {
+  const token = req.headers['authorization'];
+  const secretKey = require('./config').SECRET_KEY;
+  
+  if (token) {
+    req.decoded = jwt.verify(token, secretKey);
+    next();
+  } else {
+    return utilities.returnError(res, 'Failed to authenticate token', 401);
+  }
+});
+
+/* ENDPOINTS */
 
 // users
 router.get('/users', async (req, res) => {
@@ -26,11 +62,5 @@ router.post('/users', async (req, res) => {
   
   return res.status(200).json({ token: token });
 });
-
-// authenticate
-router.post('/login', (req, res) => { });
-
-// add authentication middleware for all other routes
-router.use((req, res, next) => { });
 
 module.exports = router;
