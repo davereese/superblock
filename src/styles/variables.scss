@@ -12,20 +12,38 @@ $brick:                   #f14a29;
 $rosey:                   #C6538C;
 $bluebird:                #56CCF2;
 
+$topaz:                   #00d1ff;
+$cheddar:                 #f2c94c;
+$satsuma:                 #f2994a;
+$kush:                    #88d804;
+$embers:                  #eb5757;
+
 // COLOR ASSIGNMENTS
 // -layout
 $body-bg:                 $dark-gray;
 $highlight-color:         $minty;
+$editor-bg:               $hurricane;
+$line-number-bg:          $stormy;
 // -text
 $link-color:              $minty;
 $placeholder-color:       $overcast;
 $label-color:             $minty;
 $text-dark:               $black;
+$text-light:              $white;
 // -assets
 $js-yellow:               $canary;
 $sass-pink:               $rosey;
 $css-blue:                $bluebird;
 $html-red:                $brick;
+// -syntax
+$keyword:                 $topaz;
+$function:                $cheddar;
+$operator:                $embers;
+$regex:                   $embers;
+$deleted:                 $embers;
+$string:                  $satsuma;
+$number:                  $kush;
+$comment:                 $overcast;
 
 // FONTS
 $base-font-size:          14px;
