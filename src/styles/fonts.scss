@@ -5,7 +5,7 @@
 @import './variables.scss';
 
 $poppins: 'Poppins', sans-serif;
-$fira-code: 'Fira Mono', monospace;
+$fira-code: 'Fira Code', monospace;
 
 .header-lg {
   font-family: $poppins;
@@ -25,7 +25,7 @@ $fira-code: 'Fira Mono', monospace;
   font-weight: $font-weight-regular;
 }
 
-.tag {
+.tag:not(.token.tag) {
   @extend .legal;
   letter-spacing: px-to-rem(1px);
 }
@@ -37,6 +37,6 @@ $fira-code: 'Fira Mono', monospace;
 
 .code {
   font-family: $fira-code;
-  font-size: px-to-rem(14px);
-  line-height: 1.5;
+  font-size: px-to-rem(12px);
+  font-weight: 500;
 }
