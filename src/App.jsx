@@ -12,7 +12,7 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <header>
-              <img src={logo} className="logo" alt="logo" />
+              <img src={logo} className="logo" alt="superblock" />
             </header>
             <div className="main">
               <Route path="/" exact component={Editing} />

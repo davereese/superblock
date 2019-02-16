@@ -12,10 +12,10 @@ COLORS
 * sass - pink
 * html - red
 */
-const Block = ({
+function Block({
   color,
   blockType,
-}) => {
+}) {
   return (
     <div className={`${color} ${blockType}`}>
       <svg viewBox="0 0 87 100" fill="none" xmlns="http://www.w3.org/2000/svg">

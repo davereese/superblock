@@ -27,7 +27,7 @@ class Editing extends React.Component {
     return (
       <React.Fragment>
         <div className="sidebar">
-          <label htmlFor="language">Language</label><br/>
+          <label htmlFor="language">Language</label><br />
           <select
             id="language"
             value={this.state.target}
@@ -39,14 +39,14 @@ class Editing extends React.Component {
             <option value='sass'>SASS</option>
             <option value='html'>HTML</option>
           </select>
-          <label htmlFor="newtag">Tag</label><br/>
+          <label htmlFor="newtag">Tag</label><br />
           <div className="input-and-button">
-            <input type="text" id="newtag"/>
+            <input type="text" id="newtag" />
             <button type="button" onClick={addTag}>+</button>
           </div>
         </div>
         <div className="content">
-          <Editor blockContent={content} language={this.state.language}/>
+          <Editor blockContent={content} language={this.state.language} />
         </div>
       </React.Fragment>
     );

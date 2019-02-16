@@ -5,11 +5,11 @@ import './Editor.scss';
 
 /* This component just renders line numbers based on a single number
 of lines given in a prop */
-const LineNumbers = ({
+function LineNumbers({
   text,
   focus,
   syntax,
-}) => {
+}) {
   let linesArray = text.split('\n');
 
   return (
