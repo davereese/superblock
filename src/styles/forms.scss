@@ -9,10 +9,11 @@ label {
 
 input,
 select,
-search {
+search,
+button {
   position: relative;
   box-sizing: border-box;
-  padding: 10px 15px;
+  padding: 8px 15px;
   margin-bottom: 15px;
   width: 100%;
   appearance: none;
@@ -30,8 +31,28 @@ search {
   }
 }
 
+button {
+  padding: 8px;
+  color: $highlight-color;
+  font-size: px-to-rem(14px);
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:focus,
+  &:hover {
+    background-color: $button-hover;
+    border-color: $button-hover;
+    cursor: pointer;
+  }
+}
+
 select {
   background-image: url(./resources/images/chevron.svg);
   background-repeat: no-repeat;
-  background-position: calc(100% - 20px);
+  background-position: calc(100% - 17px);
+}
+
+.input-and-button {
+  display: grid;
+  grid-template-columns: calc(100% - 64px) 44px;
+  grid-column-gap: 20px;
 }

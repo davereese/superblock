@@ -20,6 +20,10 @@ class Editing extends React.Component {
       this.setState({[field]: e.target.value});
     }
 
+    const addTag = (e) => {
+      // add tag
+    }
+
     return (
       <React.Fragment>
         <div className="sidebar">
@@ -36,7 +40,10 @@ class Editing extends React.Component {
             <option value='html'>HTML</option>
           </select>
           <label htmlFor="newtag">Tag</label><br/>
-          <input type="text" id="newtag"/>
+          <div className="input-and-button">
+            <input type="text" id="newtag"/>
+            <button type="button" onClick={addTag}>+</button>
+          </div>
         </div>
         <div className="content">
           <Editor blockContent={content} language={this.state.language}/>
