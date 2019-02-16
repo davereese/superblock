@@ -1,4 +1,5 @@
 @import './styles/variables.scss';
+@import './styles/utilities.scss';
 
 .app {
   header {
@@ -18,15 +19,34 @@
     }
   }
 
+  .sidebar {
+    grid-area: sidebar;
+  }
+
+  .content {
+    grid-area: content;
+  }
+
   .main {
     position: relative;
     z-index: 0;
     box-sizing: border-box;
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: 25% 75%;
-    padding: 97px 20px 0;
+    grid-template-columns: 1fr;
+    grid-column-gap: 20px;
+    grid-template-areas: 'content' 'sidebar';
+    padding: 87px 20px 0;
     margin: 0 auto;
     max-width: 1600px;
+
+    @include for-tablet-landscape-up () {
+      grid-template-areas: 'sidebar content';
+      grid-template-columns: calc(25% - 20px) 75%;
+    }
+
+    @include for-desktop-up () {
+      grid-template-columns: calc(20% - 20px) 80%;
+    }
   }
 }

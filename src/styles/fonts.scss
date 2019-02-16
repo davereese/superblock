@@ -21,17 +21,22 @@ $fira-code: 'Fira Code', monospace;
 
 .legal {
   font-family: $poppins;
-  font-size: px-to-rem(11px);
+  font-size: px-to-rem(10px);
   font-weight: $font-weight-regular;
 }
 
 .tag:not(.token.tag) {
-  @extend .legal;
+  font-family: $poppins;
+  font-size: px-to-rem(10px);
+  font-weight: $font-weight-regular;
   letter-spacing: px-to-rem(1px);
 }
 
 .label {
-  @extend .tag;
+  font-family: $poppins;
+  font-size: px-to-rem(10px);
+  font-weight: $font-weight-regular;
+  letter-spacing: px-to-rem(1px);
   text-transform: uppercase;
 }
 

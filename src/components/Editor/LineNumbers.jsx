@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import "./prism.scss";
 import './Editor.scss';
@@ -8,11 +8,12 @@ of lines given in a prop */
 const LineNumbers = ({
   text,
   focus,
+  syntax,
 }) => {
   let linesArray = text.split('\n');
 
   return (
-    <div className={'editor__lines-container language-js'}>
+    <div className={`editor__lines-container`}>
       {linesArray.map((line, index) => {
         if (line !== undefined) {
           const lineFocus = focus - 1 === index ? 'focus' : '';
@@ -20,7 +21,7 @@ const LineNumbers = ({
               key={index}
               className={`editor__line ${lineFocus}`}
             >
-              <pre><code>{line}</code></pre>
+              <pre className={`language-${syntax}`}><code className={`language-${syntax}`}>{line}</code></pre>
             </div>);
         }
         return null;
@@ -32,11 +33,13 @@ const LineNumbers = ({
 LineNumbers.propTypes = {
   text: PropTypes.string,
   focus: PropTypes.number,
+  syntax: PropTypes.string,
 };
 
 LineNumbers.defaultProps = {
   text: '',
-  numner: null,
+  focus: null,
+  syntax: '',
 };
 
 export default LineNumbers;

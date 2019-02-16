@@ -1,9 +1,12 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import './Editor.scss';
 import Prism from 'prismjs';
 import LineNumbers from './LineNumbers';
 import * as editor from './editorFunctions.js';
 
+/* This component handles the main content editor (IDE). It takes care of the
+content display, editing functionality and syntax highlighting */
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +18,12 @@ class Editor extends React.Component {
       shiftDown: false,
     }
     this.textareaRef = React.createRef();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.language !== this.props.language) {
+      Prism.highlightAll();
+    }
   }
 
   render() {
@@ -145,10 +154,21 @@ class Editor extends React.Component {
         <LineNumbers
           text={this.state.textarea}
           focus={this.state.focusLine}
+          syntax={this.props.language}
         />
       </div>
     );
   }
 }
+
+Editor.propTypes = {
+  blockContent: PropTypes.string,
+  language: PropTypes.string,
+};
+
+Editor.defaultProps = {
+  blockContent: '',
+  language: '',
+};
 
 export default Editor;
