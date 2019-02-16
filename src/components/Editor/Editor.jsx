@@ -20,6 +20,12 @@ class Editor extends React.Component {
     this.textareaRef = React.createRef();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.language !== this.props.language) {
+      Prism.highlightAll();
+    }
+  }
+
   render() {
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
@@ -148,6 +154,7 @@ class Editor extends React.Component {
         <LineNumbers
           text={this.state.textarea}
           focus={this.state.focusLine}
+          syntax={this.props.language}
         />
       </div>
     );
@@ -156,10 +163,12 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   blockContent: PropTypes.string,
+  language: PropTypes.string,
 };
 
 Editor.defaultProps = {
   blockContent: '',
+  language: '',
 };
 
 export default Editor;
