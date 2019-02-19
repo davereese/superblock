@@ -35,10 +35,14 @@ router.use((req, res, next) => {
   const secretKey = require('./config').SECRET_KEY;
   
   if (token) {
-    req.decoded = jwt.verify(token, secretKey);
-    next();
+    try {
+      req.decoded = jwt.verify(token, secretKey);
+      next();
+    } catch (error) {
+      return utilities.returnError(res, 'Invalid token', 401);
+    }
   } else {
-    return utilities.returnError(res, 'Failed to authenticate token', 401);
+    return utilities.returnError(res, 'No token present in headers', 401);
   }
 });
 
