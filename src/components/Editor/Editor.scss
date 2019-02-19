@@ -28,7 +28,7 @@
   &__line {
     z-index: 1;
     position: relative;
-    padding: 0 20px 0 60px;
+    padding: 0 12px 0 60px;
     outline: none;
     color: $text-light;
     transition: background-color 0.2s;
@@ -56,6 +56,12 @@
       code {
         @extend .code;
         line-height: 1.5;
+
+        // hack to fix a weird firefox empty line line-height bug
+        &::before {
+          content: ' ';
+          float: right;
+        }
       }
     }
   }
