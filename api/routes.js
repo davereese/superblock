@@ -9,7 +9,7 @@ router.get('/ping', (req, res) => {
   return res.status(200).json({ message: 'pong!' });
 });
 
-// authenticate
+// user login
 router.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -27,6 +27,16 @@ router.post('/login', async (req, res) => {
       return utilities.returnError(res, 'Invalid password', 401);
     }
   }
+});
+
+// create new user
+router.post('/users', async (req, res) => {
+  const token = await Users.create(req.body)
+    .catch(error => {
+      return utilities.returnError(res, error);
+    });
+  
+  return res.status(200).json({ token: token });
 });
 
 // add authentication middleware for all other routes
@@ -56,15 +66,6 @@ router.get('/users', async (req, res) => {
     });
   
   return res.status(200).json({ users: users });
-});
-
-router.post('/users', async (req, res) => {
-  const token = await Users.create(req.body)
-    .catch(error => {
-      return utilities.returnError(res, error);
-    });
-  
-  return res.status(200).json({ token: token });
 });
 
 module.exports = router;
