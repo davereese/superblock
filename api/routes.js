@@ -14,11 +14,11 @@ router.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   
-  const user = await Users.search(username)
-    .catch(error => utilities.returnError(res, error, 401));
+  const [ user ] = await Users.search(username)
+    .catch(error => utilities.returnError(res, error, 404));
+  
   if (user) {
-    
-    const valid = utilities.checkPassword(password, user.password);
+    const valid = await utilities.checkPassword(password, user.password);
     if (valid) {
       const payload = { username: user.username };
       const token = utilities.generateToken(payload);

@@ -13,8 +13,8 @@ exports.hashPassword = async (password) => {
 }
 
 exports.checkPassword = async (password, hash) => {
-  const valid = await bcrypt.compare(password, hash);
-  return valid ? Promise.resolve() : Promise.reject();
+  return await bcrypt.compare(password, hash)
+    .catch(() => Promise.reject(false))
 }
 
 exports.returnError = (response, error, code=defaultErrorCode) => {
