@@ -9,7 +9,7 @@
   min-height: 600px;
   border-radius: 4px;
   background-color: $editor-bg;
-  overflow-y: scroll;
+  overflow-y: hidden;
   counter-reset: editor;
   @extend .code;
   background-image: linear-gradient(to right, $line-number-bg, 45px, $editor-bg 45px);

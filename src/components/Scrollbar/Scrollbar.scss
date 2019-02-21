@@ -1,0 +1,35 @@
+@import '../../styles/variables.scss';
+
+.scrollContainer {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  perspective: 1px;
+  perspective-origin: top right;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  .scrollbar {
+    position: absolute;
+    transform-origin: top right;
+    top: -4px;
+    right: -5px;
+    width: 6px;
+    background-color: rgba($scrollbar-color, 0.5);
+    border-radius: 3px;
+    z-index: 11;
+    transform: matrix3d(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, -1
+      );
+    cursor: pointer;
+  }
+}
