@@ -2,6 +2,10 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import './Scrollbar.scss';
 
+/* This component will make any block element interior scrollable with
+ a custom scrollbar. The perent component that this is placed inside of
+ should just have overflow: hidden added to its styles.
+*/
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +77,7 @@ class Editor extends React.Component {
 
     return (
       <div
-        className={`scrollContainer`}
+        className="scrollContainer"
         ref={this.scrollContainerRef}
       >
         <div
