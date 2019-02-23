@@ -5,7 +5,7 @@ import './Scrollbar.scss';
 class Editor extends React.Component {
   constructor(props) {
     super(props);
-    this.scrollAreaRef = React.createRef();
+    this.scrollContainerRef = React.createRef();
     this.thumbRef = React.createRef();
   }
   
@@ -14,11 +14,16 @@ class Editor extends React.Component {
   }
 
   setThumbHeight() {
-    const scroller = this.scrollAreaRef.current;
+    const scroller = this.scrollContainerRef.current;
     const scrollerHeight = scroller.getBoundingClientRect().height;
     const thumb = this.thumbRef.current;
     const thumbHeight = scrollerHeight * scrollerHeight / scroller.scrollHeight;
     const factor = (scrollerHeight - thumbHeight)/(scroller.scrollHeight - scrollerHeight);
+
+    if (thumbHeight === scrollerHeight) {
+      thumb.style.transform = '';
+      return;
+    }
 
     thumb.scaling = factor;
     thumb.style.height = thumbHeight + 'px';
@@ -41,8 +46,8 @@ class Editor extends React.Component {
 
     const dragStart = (event) => {
       dragging = true;
-      this.scrollAreaRef.current.style.pointerEvents = 'none';
-      this.scrollAreaRef.current.style.userSelect = 'none';
+      this.scrollContainerRef.current.style.pointerEvents = 'none';
+      this.scrollContainerRef.current.style.userSelect = 'none';
   
       lastY = (event.clientY || event.clientY === 0) ? event.clientY : event.touches[0].clientY;
     }
@@ -50,15 +55,15 @@ class Editor extends React.Component {
     const dragMove = (event) => {
       if (!dragging) return;
       var clientY = (event.clientY || event.clientY === 0) ? event.clientY : event.touches[0].clientY;
-      this.scrollAreaRef.current.scrollTop += (clientY - lastY)/this.thumbRef.current.scaling;
+      this.scrollContainerRef.current.scrollTop += (clientY - lastY)/this.thumbRef.current.scaling;
       lastY = clientY;
       event.preventDefault();
     }
   
     const dragEnd = (event) => {
       dragging = false;
-      this.scrollAreaRef.current.style.pointerEvents = 'initial';
-      this.scrollAreaRef.current.style.userSelect = 'initial';
+      this.scrollContainerRef.current.style.pointerEvents = 'initial';
+      this.scrollContainerRef.current.style.userSelect = 'initial';
     }
 
     window.addEventListener('mousemove', dragMove);
@@ -69,7 +74,7 @@ class Editor extends React.Component {
     return (
       <div
         className={`scrollContainer`}
-        ref={this.scrollAreaRef}
+        ref={this.scrollContainerRef}
       >
         <div
           className="scrollbar"
