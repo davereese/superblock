@@ -7,6 +7,7 @@ import Prism from 'prismjs';
 
 import LineNumbers from './LineNumbers';
 import Scrollbar from '../Scrollbar/Scrollbar';
+import Block from '../Block/Block';
 
 /* This component handles the main content editor (IDE). It takes care of the
 content display, editing functionality and syntax highlighting */
@@ -163,6 +164,9 @@ class Editor extends React.Component {
               syntax={this.props.language}
             />
           </Scrollbar>
+          <Block color={this.props.language}>
+            {this.props.language}
+          </Block>
         </div>
       </React.Fragment>
     );
