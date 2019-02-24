@@ -99,7 +99,7 @@
     left: -4px;
   }
   100% {
-    transform: rotate(0deg) translate(0px, 0px);
+    transform: rotate(360deg) translate(0px, 0px);
     left: 0px;
   }
 }
@@ -127,7 +127,7 @@
     left: -4px;
   }
   100% {
-    transform: rotate(0deg) translate(0px, 0px);
+    transform: rotate(-360deg) translate(0px, 0px);
     left: 0px;
   }
 }
