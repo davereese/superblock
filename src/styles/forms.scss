@@ -31,6 +31,18 @@ button {
   }
 }
 
+select {
+  background-image: url(./resources/images/chevron.svg);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 17px);
+}
+
+.input-and-button {
+  display: grid;
+  grid-template-columns: calc(100% - 64px) 44px;
+  grid-column-gap: 20px;
+}
+
 button {
   padding: 8px;
   color: $highlight-color;
@@ -43,16 +55,11 @@ button {
     border-color: $button-hover;
     cursor: pointer;
   }
-}
 
-select {
-  background-image: url(./resources/images/chevron.svg);
-  background-repeat: no-repeat;
-  background-position: calc(100% - 17px);
-}
-
-.input-and-button {
-  display: grid;
-  grid-template-columns: calc(100% - 64px) 44px;
-  grid-column-gap: 20px;
+  &.no-button {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
 }

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+
 import './Editor.scss';
+import * as editor from './editorFunctions.js';
 import Prism from 'prismjs';
+
 import LineNumbers from './LineNumbers';
 import Scrollbar from '../Scrollbar/Scrollbar';
-import * as editor from './editorFunctions.js';
 
 /* This component handles the main content editor (IDE). It takes care of the
 content display, editing functionality and syntax highlighting */
@@ -137,29 +139,32 @@ class Editor extends React.Component {
     };
 
     return (
-      <div className={'editor'}>
-        <Scrollbar>
-          <textarea
-            className={'editor__input'}
-            style={textareaHeight}
-            spellCheck="false"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            ref={this.textareaRef}
-            value={this.state.textarea}
-            onChange={textareaChange}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleKeyUp}
-            onClick={handleFocus}
-          />
-          <LineNumbers
-            text={this.state.textarea}
-            focus={this.state.focusLine}
-            syntax={this.props.language}
-          />
-        </Scrollbar>
-      </div>
+      <React.Fragment>
+        <label className="editor__label">Block Title</label>
+        <div className="editor">
+          <Scrollbar>
+            <textarea
+              className="editor__input"
+              style={textareaHeight}
+              spellCheck="false"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              ref={this.textareaRef}
+              value={this.state.textarea}
+              onChange={textareaChange}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onClick={handleFocus}
+            />
+            <LineNumbers
+              text={this.state.textarea}
+              focus={this.state.focusLine}
+              syntax={this.props.language}
+            />
+          </Scrollbar>
+        </div>
+      </React.Fragment>
     );
   }
 }

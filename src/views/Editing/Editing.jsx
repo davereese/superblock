@@ -2,12 +2,14 @@ import React from 'react';
 
 import Editor from '../../components/Editor/Editor'
 import './Editing.scss';
+import Hamburger from '../../components/Hamburger/Hamburger';
 
 class Editing extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       language: '',
+      isOpen: null,
     }
   }
 
@@ -20,13 +22,17 @@ class Editing extends React.Component {
       this.setState({[field]: e.target.value});
     }
 
+    const handleSidebarToggle = (e) => {
+      this.setState({isOpen: !this.state.isOpen});
+    }
+
     const addTag = (e) => {
       // add tag
     }
 
     return (
       <React.Fragment>
-        <div className="sidebar">
+        <div className={`sidebar ${!this.state.isOpen ? 'collapsed' : ''}`}>
           <label htmlFor="language">Language</label><br />
           <select
             id="language"
@@ -45,7 +51,12 @@ class Editing extends React.Component {
             <button type="button" onClick={addTag}>+</button>
           </div>
         </div>
-        <div className="content">
+        <div className={`content ${!this.state.isOpen ? 'collapsed' : ''}`}>
+        <button
+          className="no-button sidebar-toggle"
+          onClick={handleSidebarToggle}
+        ><Hamburger open={this.state.isOpen}></Hamburger>
+        </button>
           <Editor blockContent={content} language={this.state.language} />
         </div>
       </React.Fragment>

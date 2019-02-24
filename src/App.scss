@@ -21,10 +21,35 @@
 
   .sidebar {
     grid-area: sidebar;
+    transition: all 0.5s;
+
+    &.collapsed {
+      opacity: 0;
+;
+      @include for-tablet-landscape-up () {
+        transform: translateX(calc(-45.5% - 20px));
+      }
+
+      @include for-desktop-up () {
+        transform: translateX(calc(-46.5% - 20px));
+      }
+    }
   }
 
   .content {
     grid-area: content;
+    margin-top: 3px;
+    transition: transform 0.5s;
+
+    &.collapsed {
+      @include for-tablet-landscape-up () {
+        transform: translateX(calc(-14% - 20px));
+      }
+
+      @include for-desktop-up () {
+        transform: translateX(calc(-11% - 20px));
+      }
+    }
   }
 
   .main {

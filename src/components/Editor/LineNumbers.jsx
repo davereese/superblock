@@ -13,7 +13,7 @@ function LineNumbers({
   let linesArray = text.split('\n');
 
   return (
-    <div className={`editor__lines-container`}>
+    <div className="editor__lines-container">
       {linesArray.map((line, index) => {
         if (line !== undefined) {
           const lineFocus = focus - 1 === index ? 'focus' : '';
