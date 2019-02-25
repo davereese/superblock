@@ -73,4 +73,12 @@
       grid-template-columns: calc(20% - 20px) 80%;
     }
   }
+
+  footer {
+    p {
+      color: $placeholder-color;
+      text-align: center;
+      font-size: px-to-rem(9px);
+    }
+  }
 }

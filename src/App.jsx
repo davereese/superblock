@@ -5,6 +5,8 @@ import logo from './resources/images/logo.svg';
 import './App.scss';
 import Editing from './views/Editing/Editing';
 
+const date = new Date();
+
 class App extends Component {
   render() {
     return (
@@ -17,6 +19,9 @@ class App extends Component {
             <div className="main">
               <Route path="/" exact component={Editing} />
             </div>
+            <footer>
+              <p>&copy; ${date.getFullYear()} SuperBlock. All rights reserved.</p>
+            </footer>
           </React.Fragment>
         </Router>
       </div>
