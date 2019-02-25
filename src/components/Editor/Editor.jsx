@@ -164,6 +164,18 @@ class Editor extends React.Component {
       }
     }
 
+    const handleCopy = (e) => {
+      const copyText = this.textareaRef.current;
+      copyText.select();
+      document.execCommand("copy");
+      editor.clearSelection();
+      e.target.className = 'editor__copy copied';
+    }
+
+    const removeCopiedClass = (e) => {
+      e.target.className = 'editor__copy';
+    }
+
     /** DYNAMIC STYLES **/
     const textareaHeight = {
       height: `${this.state.height}px`,
@@ -210,6 +222,11 @@ class Editor extends React.Component {
           <Block color={this.props.language}>
             {this.props.language}
           </Block>
+          <div
+            className="editor__copy"
+            onMouseDown={removeCopiedClass}
+            onClick={handleCopy}
+          >COPY</div>
         </div>
       </React.Fragment>
     );

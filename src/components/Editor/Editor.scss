@@ -145,4 +145,49 @@
     letter-spacing: 0;
     text-transform: uppercase;
   }
+
+  &__copy {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    margin-left: -37px;
+    height: 20px;
+    width: 75px;
+    background-image: url('../../resources/images/Rectangle.svg');
+    background-repeat: no-repeat;
+    font-family: $poppins;
+    color: rgba($placeholder-color, 0.75);
+    font-size: px-to-rem(10px);
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $text-light;
+    }
+
+    &.copied {
+      &::before {
+        content: 'COPIED';
+        position: absolute;
+        left: 16px;
+        animation: floatUp 1s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+        pointer-events: none;
+        color: $highlight-color;
+      }
+    }
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(-14px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
 }

@@ -133,3 +133,22 @@ export const setCaretOrSelection = (direction, target, oldContent, newContent, c
 
   return target;
 }
+
+export const clearSelection = () => {
+  let sel = document.selection;
+  if (sel) {
+    sel.empty();
+  } else {
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    }
+    const activeEl = document.activeElement;
+    if (activeEl) {
+      let tagName = activeEl.nodeName.toLowerCase();
+      if (tagName === 'textarea' || (tagName === 'input' && activeEl.type === 'text')) {
+        // Collapse the selection to the end
+        activeEl.selectionStart = activeEl.selectionEnd;
+      }
+    }
+  }
+}
