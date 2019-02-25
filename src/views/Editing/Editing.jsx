@@ -10,6 +10,7 @@ class Editing extends React.Component {
     this.state = {
       language: '',
       isOpen: null,
+      title: 'Block',
     }
   }
 
@@ -19,6 +20,7 @@ class Editing extends React.Component {
 
     const handleInputChange = (e) => {
       const field = e.target.id;
+      this.setState({title: `${e.target.value} block`});
       this.setState({[field]: e.target.value});
     }
 
@@ -52,12 +54,16 @@ class Editing extends React.Component {
           </div>
         </div>
         <div className={`content ${!this.state.isOpen ? 'collapsed' : ''}`}>
-        <button
-          className="no-button sidebar-toggle"
-          onClick={handleSidebarToggle}
-        ><Hamburger open={this.state.isOpen}></Hamburger>
-        </button>
-          <Editor blockContent={content} language={this.state.language} />
+          <button
+            className="no-button sidebar-toggle"
+            onClick={handleSidebarToggle}
+          ><Hamburger open={this.state.isOpen}></Hamburger>
+          </button>
+          <Editor
+            blockTitle={this.state.title}
+            blockContent={content}
+            language={this.state.language}
+          />
         </div>
       </React.Fragment>
     );

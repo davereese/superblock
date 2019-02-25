@@ -18,16 +18,30 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: props.blockTitle,
       textarea: props.blockContent,
       height: 600,
       focusLine: null,
       metaDown: false,
       shiftDown: false,
+      editingTitle: false,
+      customTitle: false,
     }
     this.textareaRef = React.createRef();
   }
 
+  componentDidMount() {
+    // Set customTitle if the title initializes as something other than 'Block'
+    if (this.props.blockTitle !== 'Block') {
+      this.setState({customTitle: true});
+    }
+  }
+
   componentDidUpdate(prevProps) {
+    if (prevProps.blockTitle !== this.props.blockTitle && !this.state.customTitle) {
+      this.setState({title: this.props.blockTitle});
+    }
+
     if (prevProps.language !== this.props.language) {
       Prism.highlightAll();
     }
@@ -137,6 +151,19 @@ class Editor extends React.Component {
       }
     }
 
+    const toggleTitle = (e) => {
+      this.setState({editingTitle: !this.state.editingTitle});
+    }
+
+    const handleTitleChange = (e) => {
+      this.setState({title: e.target.value});
+
+      // Set the title as a custom one so we don't overwrite it if the language selection changes.
+      if (!this.state.customTitle) {
+        this.setState({customTitle: true});
+      }
+    }
+
     /** DYNAMIC STYLES **/
     const textareaHeight = {
       height: `${this.state.height}px`,
@@ -144,7 +171,20 @@ class Editor extends React.Component {
 
     return (
       <React.Fragment>
-        <label className="editor__label">Block Title</label>
+        <label className="editor__label">
+        {this.state.editingTitle === true ?
+          <input
+            type="text"
+            className="no-style"
+            value={this.state.title}
+            onChange={handleTitleChange}
+            onBlur={toggleTitle}
+          /> :
+          <span onClick={toggleTitle}>
+            {this.state.title}
+          </span>
+        }
+        </label>
         <div className="editor">
           <Scrollbar>
             <textarea
@@ -177,11 +217,13 @@ class Editor extends React.Component {
 }
 
 Editor.propTypes = {
+  blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
 };
 
 Editor.defaultProps = {
+  blockTitle: '',
   blockContent: '',
   language: '',
 };
