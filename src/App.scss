@@ -24,9 +24,8 @@
     transition: all 0.5s;
 
     &.collapsed {
-      opacity: 0;
-;
       @include for-tablet-landscape-up () {
+        opacity: 0;
         transform: translateX(calc(-45.5% - 20px));
       }
 
