@@ -1,22 +1,29 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const knex = require('./services/knex').knex;
 const defaultErrorCode = require('./config').DEFAULT_ERROR_CODE;
+const secretKey = require('./config').SECRET_KEY;
 
 exports.generateToken = (payload) => {
-  const secret = process.env.SUPERBLOCK_SECRET;
-  return jwt.sign(payload, secret);
+  return jwt.sign(payload, secretKey);
 }
 
 exports.hashPassword = async (password) => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  return Promise.resolve(hashedPassword);
+  return await bcrypt.hash(password, 10);
 }
 
 exports.checkPassword = async (password, hash) => {
-  return await bcrypt.compare(password, hash)
-    .catch(() => Promise.reject(false))
+  return await bcrypt.compare(password, hash);
+}
+
+exports.duplicateUserCheck = async (username) => {
+  const matchingUsers = await knex('users').where('username', username);
+  
+  if (matchingUsers.length > 0) {
+    throw 'Username already exists';
+  }
 }
 
 exports.returnError = (response, error, code=defaultErrorCode) => {
-  return response.status(code).json({ message: error });
+  return response.status(code).json(error);
 }

@@ -48,6 +48,7 @@ server.listen(port, async () => {
         table.string('username');
         table.string('password');
         table.string('email');
+        table.string('token');
         table.dateTime('dateJoined');
     });
   }
