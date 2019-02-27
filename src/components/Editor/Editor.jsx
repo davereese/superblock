@@ -1,9 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import './Editor.scss';
-import Prism from 'prismjs';
-import LineNumbers from './LineNumbers';
+
 import * as editor from './editorFunctions.js';
+
+import Prism from 'prismjs';
+import 'prismjs/components/prism-sass';
+import 'prismjs/components/prism-scss';
+
+import LineNumbers from './LineNumbers';
+import Scrollbar from '../Scrollbar/Scrollbar';
+import Block from '../Block/Block';
 
 /* This component handles the main content editor (IDE). It takes care of the
 content display, editing functionality and syntax highlighting */
@@ -11,16 +17,30 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: props.blockTitle,
       textarea: props.blockContent,
       height: 600,
       focusLine: null,
       metaDown: false,
       shiftDown: false,
+      editingTitle: false,
+      customTitle: false,
     }
     this.textareaRef = React.createRef();
   }
 
+  componentDidMount() {
+    // Set customTitle if the title initializes as something other than 'Block'
+    if (this.props.blockTitle !== 'Block') {
+      this.setState({customTitle: true});
+    }
+  }
+
   componentDidUpdate(prevProps) {
+    if (prevProps.blockTitle !== this.props.blockTitle && !this.state.customTitle) {
+      this.setState({title: this.props.blockTitle});
+    }
+
     if (prevProps.language !== this.props.language) {
       Prism.highlightAll();
     }
@@ -130,43 +150,96 @@ class Editor extends React.Component {
       }
     }
 
+    const toggleTitle = (e) => {
+      this.setState({editingTitle: !this.state.editingTitle});
+    }
+
+    const handleTitleChange = (e) => {
+      this.setState({title: e.target.value});
+
+      // Set the title as a custom one so we don't overwrite it if the language selection changes.
+      if (!this.state.customTitle) {
+        this.setState({customTitle: true});
+      }
+    }
+
+    const handleCopy = (e) => {
+      const copyText = this.textareaRef.current;
+      copyText.select();
+      document.execCommand("copy");
+      editor.clearSelection();
+      e.target.className = 'editor__copy copied';
+    }
+
+    const removeCopiedClass = (e) => {
+      e.target.className = 'editor__copy';
+    }
+
     /** DYNAMIC STYLES **/
     const textareaHeight = {
       height: `${this.state.height}px`,
     };
 
     return (
-      <div className={'editor'}>
-        <textarea
-          className={'editor__input'}
-          style={textareaHeight}
-          spellCheck="false"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          ref={this.textareaRef}
-          value={this.state.textarea}
-          onChange={textareaChange}
-          onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
-          onClick={handleFocus}
-        />
-        <LineNumbers
-          text={this.state.textarea}
-          focus={this.state.focusLine}
-          syntax={this.props.language}
-        />
-      </div>
+      <React.Fragment>
+        <label className="editor__label">
+        {this.state.editingTitle === true ?
+          <input
+            type="text"
+            className="no-style"
+            value={this.state.title}
+            onChange={handleTitleChange}
+            onBlur={toggleTitle}
+          /> :
+          <span onClick={toggleTitle}>
+            {this.state.title}
+          </span>
+        }
+        </label>
+        <div className="editor">
+          <Scrollbar>
+            <textarea
+              className="editor__input"
+              style={textareaHeight}
+              spellCheck="false"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              ref={this.textareaRef}
+              value={this.state.textarea}
+              onChange={textareaChange}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}
+              onClick={handleFocus}
+            />
+            <LineNumbers
+              text={this.state.textarea}
+              focus={this.state.focusLine}
+              syntax={this.props.language}
+            />
+          </Scrollbar>
+          <Block color={this.props.language}>
+            {this.props.language}
+          </Block>
+          <div
+            className="editor__copy"
+            onMouseDown={removeCopiedClass}
+            onClick={handleCopy}
+          >COPY</div>
+        </div>
+      </React.Fragment>
     );
   }
 }
 
 Editor.propTypes = {
+  blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
 };
 
 Editor.defaultProps = {
+  blockTitle: '',
   blockContent: '',
   language: '',
 };

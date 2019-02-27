@@ -1,5 +1,3 @@
-@import './variables.scss';
-
 // CONVERT PX TO REM
 @function px-to-rem($px, $base:$base-font-size){
   @return ($px / $base) * 1rem;

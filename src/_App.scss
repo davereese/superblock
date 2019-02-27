@@ -1,5 +1,12 @@
-@import './styles/variables.scss';
-@import './styles/utilities.scss';
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $poppins;
+  font-size: $base-font-size;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $body-bg;
+}
 
 .app {
   header {
@@ -21,10 +28,34 @@
 
   .sidebar {
     grid-area: sidebar;
+    transition: all 0.5s;
+
+    &.collapsed {
+      @include for-tablet-landscape-up () {
+        opacity: 0;
+        transform: translateX(calc(-45.5% - 20px));
+      }
+
+      @include for-desktop-up () {
+        transform: translateX(calc(-46.5% - 20px));
+      }
+    }
   }
 
   .content {
     grid-area: content;
+    margin-top: 3px;
+    transition: transform 0.5s;
+
+    &.collapsed {
+      @include for-tablet-landscape-up () {
+        transform: translateX(calc(-14% - 20px));
+      }
+
+      @include for-desktop-up () {
+        transform: translateX(calc(-11% - 20px));
+      }
+    }
   }
 
   .main {
@@ -47,6 +78,14 @@
 
     @include for-desktop-up () {
       grid-template-columns: calc(20% - 20px) 80%;
+    }
+  }
+
+  footer {
+    p {
+      color: $placeholder-color;
+      text-align: center;
+      font-size: px-to-rem(9px);
     }
   }
 }

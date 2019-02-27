@@ -1,0 +1,27 @@
+.block-image {
+  position: relative;
+
+  &.fill {
+    &.primary svg {
+      fill: $highlight-color;
+    }
+
+    &.js svg { fill: $js-yellow; }
+    &.css svg { fill: $css-blue; }
+    &.sass svg { fill: $sass-pink; }
+    &.html svg { fill: $html-red; }
+  }
+
+  &.stroke svg {
+    stroke-width: 4;
+    stroke: $highlight-color;
+  }
+
+  span {
+    position: absolute;
+    width: 100%;
+    top: 30%;
+    text-align: center;
+    font-family: $poppins;
+  }
+}

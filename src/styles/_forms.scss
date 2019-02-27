@@ -1,6 +1,3 @@
-@import './utilities.scss';
-@import './variables.scss';
-
 label {
   margin: 0;
   @extend .label;
@@ -29,6 +26,28 @@ button {
   &:focus {
     border: 1px solid $highlight-color;
   }
+
+  &.no-style {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    min-width: 1px;
+    border: none;
+    background-color: transparent;
+  }
+}
+
+select {
+  background-image: url(./resources/images/chevron.svg);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 17px);
+}
+
+.input-and-button {
+  display: grid;
+  grid-template-columns: calc(100% - 64px) 44px;
+  grid-column-gap: 20px;
 }
 
 button {
@@ -43,16 +62,11 @@ button {
     border-color: $button-hover;
     cursor: pointer;
   }
-}
 
-select {
-  background-image: url(./resources/images/chevron.svg);
-  background-repeat: no-repeat;
-  background-position: calc(100% - 17px);
-}
-
-.input-and-button {
-  display: grid;
-  grid-template-columns: calc(100% - 64px) 44px;
-  grid-column-gap: 20px;
+  &.no-button {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
 }

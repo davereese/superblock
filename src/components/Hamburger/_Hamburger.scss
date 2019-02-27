@@ -1,0 +1,131 @@
+.hamburger {
+  display: block;
+  position: absolute;
+  top: 4px;
+  margin: 0;
+  padding: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid $highlight-color;
+  transition: border 0.2s;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 9px;
+    height: 1px;
+    background-color: $highlight-color;
+    transition: background-color 0.2s, transform 2s;
+  }
+
+  &::before {
+    margin-top: -4px;
+  }
+
+  &::after {
+    margin-top: 2px;
+  }
+
+  &:hover,
+  &:focus {
+    border: none;
+    border-top: 1px solid $white;
+
+    &::before,
+    &::after {
+      background-color: $white;
+    }
+  }
+
+  &.expanded {
+    border-color: transparent;
+
+    &::before {
+      animation: flipUpExpand 0.5s;
+      animation-fill-mode: forwards;
+      transform-origin: top right;
+    }
+
+    &::after {
+      animation: flipDownExpand 0.5s;
+      animation-fill-mode: forwards;
+      animation-delay: 0.07s;
+      transform-origin: bottom right;
+    }
+  }
+
+  &.collapsed {
+    &::before {
+      margin-top: -4px;
+      animation: flipUpCollapse 0.5s;
+      animation-delay: 0.07s;
+      transform-origin: top right;
+    }
+  
+    &::after {
+      margin-top: 2px;
+      animation: flipDownCollapse 0.5s;
+      transform-origin: bottom right;
+    }
+  }
+}
+
+@keyframes flipUpExpand {
+  0% {
+    transform: rotate(0deg) translate(0px, 0px);
+    left: 0;
+  }
+  25% {
+    left: -8px;
+  }
+  100% {
+    transform: rotate(225deg) translate(5px, -6px);
+    left: 0;
+  }
+}
+
+@keyframes flipUpCollapse {
+  0% {
+    transform: rotate(225deg) translate(5px, -6px);
+    left: 0px;
+  }
+  25% {
+    left: -4px;
+  }
+  100% {
+    transform: rotate(360deg) translate(0px, 0px);
+    left: 0px;
+  }
+}
+
+@keyframes flipDownExpand {
+  0% {
+    transform: rotate(0deg) translate(0px, 0px);
+    left: 0px;
+  }
+  25% {
+    left: -8px;
+  }
+  100% {
+    transform: rotate(-225deg) translate(5px, 6px);
+    left: 0px;
+  }
+}
+
+@keyframes flipDownCollapse {
+  0% {
+    transform: rotate(-225deg) translate(5px, 6px);
+    left: 0px;
+  }
+  25% {
+    left: -4px;
+  }
+  100% {
+    transform: rotate(-360deg) translate(0px, 0px);
+    left: 0px;
+  }
+}

@@ -1,15 +1,19 @@
 /* autoprefixer grid: on */
 
-@import './styles/variables.scss';
-@import './styles/fonts.scss';
-@import './styles/forms.scss';
+// VARIABLES & SETUP
+@import './styles/variables';
+@import './styles/utilities';
+@import './styles/fonts';
+@import './styles/forms';
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: $poppins;
-  font-size: $base-font-size;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: $body-bg;
-}
+@import './App';
+
+// VIEWS
+@import './views/Editing/Editing';
+
+// COMPONENTS
+@import './components/Editor/Editor';
+@import './components/Editor/prism';
+@import './components/Scrollbar/Scrollbar';
+@import './components/Hamburger/Hamburger';
+@import './components/Block/Block';
