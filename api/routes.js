@@ -13,7 +13,7 @@ router.get('/ping', (req, res) => {
 router.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  
+
   const [ user ] = await Users.search(username)
     .catch(error => utilities.returnError(res, error, 404));
   

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import './Editor.scss';
 import * as editor from './editorFunctions.js';
 
 import Prism from 'prismjs';

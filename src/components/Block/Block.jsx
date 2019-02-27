@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import './Block.scss';
 
 /* This component just renders a block graphic. It can be either
 filled or stroked, and can be one of the specified colors if filled.

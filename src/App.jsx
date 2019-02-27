@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import logo from './resources/images/logo.svg';
-import './App.scss';
 import Editing from './views/Editing/Editing';
 
 const date = new Date();

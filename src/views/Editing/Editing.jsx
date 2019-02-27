@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Editor from '../../components/Editor/Editor'
-import './Editing.scss';
 import Hamburger from '../../components/Hamburger/Hamburger';
 
 class Editing extends React.Component {
@@ -28,9 +27,9 @@ class Editing extends React.Component {
       this.setState({isOpen: !this.state.isOpen});
     }
 
-    const addTag = (e) => {
-      // add tag
-    }
+    // const addTag = (e) => {
+    //   // add tag
+    // }
 
     return (
       <React.Fragment>
@@ -47,11 +46,12 @@ class Editing extends React.Component {
             <option value='sass'>SASS</option>
             <option value='html'>HTML</option>
           </select>
+          {/* Hide for unauthenticated users
           <label htmlFor="newtag">Tag</label><br />
           <div className="input-and-button">
             <input type="text" id="newtag" />
             <button type="button" onClick={addTag}>+</button>
-          </div>
+          </div> */}
         </div>
         <div className={`content ${!this.state.isOpen ? 'collapsed' : ''}`}>
           <button

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import './Hamburger.scss';
 
 /* This component just displays a hamburger menu graphic. It has a
  transition between expanded and collapsed.

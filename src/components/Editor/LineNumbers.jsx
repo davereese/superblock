@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import "./prism.scss";
-import './Editor.scss';
 
 /* This component just renders line numbers based on a single number
 of lines given in a prop */
