@@ -51,16 +51,30 @@ select {
 }
 
 button {
-  padding: 8px;
+  cursor: pointer;
+  width: 80%;
+  background-color: $button-hover;
+  border-color: $button-hover;
   color: $highlight-color;
-  font-size: px-to-rem(14px);
-  transition: background-color 0.2s, border-color 0.2s;
+  transition: background-color 0.4s, border-color 0.4s;
 
   &:focus,
   &:hover {
-    background-color: $button-hover;
-    border-color: $button-hover;
-    cursor: pointer;
+    background-color: darken($highlight-color, 43%);
+    border-color: darken($highlight-color, 43%);
+  }
+
+  &.icon-button {
+    padding: 8px;
+    color: $highlight-color;
+    font-size: px-to-rem(14px);
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:focus,
+    &:hover {
+      background-color: $button-hover;
+      border-color: $button-hover;
+    }
   }
 
   &.no-button {

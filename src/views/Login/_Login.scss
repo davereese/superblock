@@ -1,0 +1,21 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__form {
+    width: 300px;
+    transform: translateY(-10%);
+  }
+
+  h1.header-lg {
+    margin-top: 0;
+    color: $text-light;
+    text-align: center;
+  }
+
+  button {
+    display: block;
+    margin: 20px auto 0;
+  }
+}
