@@ -4,7 +4,8 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
-const knex = require('./services/knex').knex;
+const knex = require('./services/knex');
+const Users = require('./models/users');
 
 // init express
 const app = express();
@@ -44,12 +45,7 @@ server.listen(port, async () => {
   const exists = await knex.schema.hasTable('users');
   if (!exists) {
     await knex.schema.createTable('users', table => {
-        table.increments();
-        table.string('username');
-        table.string('password');
-        table.string('email');
-        table.string('token');
-        table.dateTime('dateJoined');
+        Users.createTable(table);
     });
   }
 });

@@ -66,9 +66,10 @@ router.param('userId', (req, res, next) => {
   next();
 });
 
-// users
+/* USERS */
 const USERS_ENDPOINT = '/users';
 
+// list
 router.get(USERS_ENDPOINT, async (req, res) => {
   try {
     const users = await Users.list();
@@ -78,15 +79,35 @@ router.get(USERS_ENDPOINT, async (req, res) => {
   }
 });
 
-// TODO: query user endpoint
+// search
+router.get(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+  const userId = req.params.userId;
+  
+  try {
+    const user = await Users.search(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json(error);
+  }
+});
 
-// TODO: update user endpoint
+// update
+router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+  const userId = req.params.userId;
 
+  try {
+    const user = await Users.search(userId);
+  } catch (error) {
+
+  }
+});
+
+// delete
 router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {
-    await Users.delete(userId);
+    await Users.remove(userId);
     return res.status(202).send();
   } catch (error) {
     return res.status(500).json(error);

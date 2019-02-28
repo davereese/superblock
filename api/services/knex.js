@@ -7,4 +7,4 @@ const knexConfig = {
     },
 };
 
-exports.knex = require('knex')(knexConfig);
+module.exports = require('knex')(knexConfig);
