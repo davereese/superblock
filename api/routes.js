@@ -30,14 +30,14 @@ router.post('/login', async (req, res) => {
 // create new user
 router.post('/users', async (req, res) => {
   if (!req.body.username || !req.body.password) {
-    return utilities.returnError(res, 'username and password are required', 400);
+    return res.status(400).json('username and password are required');
   }
   
   try {
     const user = await Users.create(req.body);
     return res.status(201).json(user);
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).json(error);
   }
 });
 
@@ -51,10 +51,10 @@ router.use((req, res, next) => {
       req.user = jwt.verify(token, secretKey);
       next();
     } catch (error) {
-      return utilities.returnError(res, 'invalid token', 401);
+      return res.status(401).json('invalid token');
     }
   } else {
-    return utilities.returnError(res, 'no token present in headers', 401);
+    return res.status(401).json('no token present in headers');
   }
 });
 
@@ -74,11 +74,13 @@ router.get(USERS_ENDPOINT, async (req, res) => {
     const users = await Users.list();
     return res.status(200).json(users);
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).json(error);
   }
 });
 
 // TODO: query user endpoint
+
+// TODO: update user endpoint
 
 router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
@@ -87,7 +89,7 @@ router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
     await Users.delete(userId);
     return res.status(202).send();
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).json(error);
   }
 });
 

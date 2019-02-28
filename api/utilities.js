@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const knex = require('./services/knex').knex;
-const defaultErrorCode = require('./config').DEFAULT_ERROR_CODE;
 const secretKey = require('./config').SECRET_KEY;
 
 exports.generateToken = (payload) => {
@@ -22,8 +21,4 @@ exports.duplicateUserCheck = async (username) => {
   if (matchingUsers.length > 0) {
     throw 'Username already exists';
   }
-}
-
-exports.returnError = (response, error, code=defaultErrorCode) => {
-  return response.status(code).json(error);
 }
