@@ -8,7 +8,7 @@ class Editing extends React.Component {
     super(props);
     this.state = {
       language: '',
-      isOpen: null,
+      isOpen: '',
       title: 'Block',
     }
   }
@@ -33,7 +33,10 @@ class Editing extends React.Component {
 
     return (
       <React.Fragment>
-        <div className={`sidebar ${!this.state.isOpen ? 'collapsed' : ''}`}>
+        <div
+          className={`sidebar ${this.state.isOpen}`}
+          role="complementary"
+        >
           <label htmlFor="language">Language</label><br />
           <select
             id="language"
@@ -53,11 +56,15 @@ class Editing extends React.Component {
             <button type="button" onClick={addTag}>+</button>
           </div> */}
         </div>
-        <div className={`content ${!this.state.isOpen ? 'collapsed' : ''}`}>
+        <div
+          className={`content ${this.state.isOpen}`}
+          role="main"
+        >
+          {/* h1 tag is in the editor component */}
           <button
             className="no-button sidebar-toggle"
             onClick={handleSidebarToggle}
-          ><Hamburger open={this.state.isOpen}></Hamburger>
+          ><Hamburger open={this.state.isOpen ? true : false}></Hamburger>
           </button>
           <Editor
             blockTitle={this.state.title}

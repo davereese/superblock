@@ -191,9 +191,9 @@ class Editor extends React.Component {
             onChange={handleTitleChange}
             onBlur={toggleTitle}
           /> :
-          <span onClick={toggleTitle}>
+          <h1 onClick={toggleTitle}>
             {this.state.title}
-          </span>
+          </h1>
         }
         </label>
         <div className="editor">
