@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const utilities = require('./utilities');
+const util = require('./util');
 const Users = require('./models/users');
 
 // ping test
@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
   
   try {
     const user = await Users.search(username);
-    const validPassword = await utilities.checkPassword(password, user.password);
+    const validPassword = await util.checkPassword(password, user.password);
     if (validPassword) {
       return res.status(200).json(user);
     } else{

@@ -1,5 +1,5 @@
 const knex = require('../services/knex');
-const utilities = require('../utilities');
+const util = require('../util');
   
 const createTable = (table) => {
   table.increments();
@@ -42,14 +42,14 @@ const create = async (request) => {
 
   try {
     // check that username doesn't already exist
-    await utilities.duplicateUserCheck(username)
+    await util.duplicateUserCheck(username)
   
     // hash user password
-    const hashedPassword = await utilities.hashPassword(password)
+    const hashedPassword = await util.hashPassword(password)
 
     // create jwt token
     const payload = { user: username };
-    const token = utilities.generateToken(payload);
+    const token = util.generateToken(payload);
     
     // create user object
     const user = {
