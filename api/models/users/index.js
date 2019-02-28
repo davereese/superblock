@@ -1,5 +1,5 @@
-const knex = require('../services/knex');
-const util = require('../util');
+const knex = require('../../services/knex');
+const util = require('./util');
   
 const createTable = (table) => {
   table.increments();
