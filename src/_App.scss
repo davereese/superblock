@@ -27,10 +27,17 @@ body {
     }
 
     .user {
+      text-align: right;
+
       a {
         color: $highlight-color;
         font-size: px-to-rem(14px);
         text-decoration: none;
+      }
+
+      &__details {
+        line-height: 1.1;
+        color: $text-light;
       }
     }
   }
