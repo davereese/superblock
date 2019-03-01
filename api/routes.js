@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const util = require('./models/users/util');
-const Users = require('./models/users');
+const users = require('./models/users');
 
 // ping test
 router.get('/ping', (req, res) => {
@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
   const password = req.body.password;
   
   try {
-    const user = await Users.search(username);
+    const user = await users.search(username);
     const validPassword = await util.checkPassword(password, user.password);
     if (validPassword) {
       return res.status(200).json(user);
@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json('failed to validate password');
     }
   } catch (error) {
-    return res.status(404).json(error);
+    return res.status(404).send(error);
   }
 });
 
@@ -34,10 +34,10 @@ router.post('/users', async (req, res) => {
   }
   
   try {
-    const user = await Users.create(req.body);
+    const user = await users.create(req.body);
     return res.status(201).json(user);
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -72,10 +72,10 @@ const USERS_ENDPOINT = '/users';
 // list
 router.get(USERS_ENDPOINT, async (req, res) => {
   try {
-    const users = await Users.list();
+    const users = await users.list();
     return res.status(200).json(users);
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -84,10 +84,10 @@ router.get(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {
-    const user = await Users.search(userId);
+    const user = await users.search(userId);
     res.status(200).json(user);
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).send(error);
   }
 });
 
@@ -96,7 +96,7 @@ router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await Users.search(userId);
+    const user = await users.search(userId);
   } catch (error) {
 
   }
@@ -107,10 +107,10 @@ router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {
-    await Users.remove(userId);
+    await users.remove(userId);
     return res.status(202).send();
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
 });
 

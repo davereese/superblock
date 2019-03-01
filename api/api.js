@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
 const knex = require('./services/knex');
-const Users = require('./models/users');
+const users = require('./models/users');
 
 // init express
 const app = express();
@@ -42,10 +42,10 @@ server.listen(port, async () => {
   console.log(`API running on localhost:${port}`)
   
   // on server load, create users table if necessary
-  const exists = await knex.schema.hasTable('users');
+  const exists = await knex.schema.hasTable(users.table);
   if (!exists) {
-    await knex.schema.createTable('users', table => {
-        Users.createTable(table);
+    await knex.schema.createTable(users.table, schema => {
+        users.createTable(schema);
     });
   }
 });

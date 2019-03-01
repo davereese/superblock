@@ -1,18 +1,20 @@
 const knex = require('../../services/knex');
 const util = require('./util');
   
-const createTable = (table) => {
-  table.increments();
-  table.string('username');
-  table.string('password');
-  table.string('email');
-  table.string('token');
-  table.dateTime('dateJoined');
+const table = 'users';
+
+const createTable = (schema) => {
+  schema.increments();
+  schema.string('username');
+  schema.string('password');
+  schema.string('email');
+  schema.string('token');
+  schema.dateTime('dateJoined');
 }
 
 const list = async () => {
   try {
-    return await knex('users');
+    return await knex(table);
   } catch (error) {
     throw error;
   }
@@ -61,7 +63,7 @@ const create = async (request) => {
     };
     
     // save user to db
-    await knex('users').insert(user)
+    await knex(table).insert(user)
 
     return user;
   } catch (error) {
@@ -81,7 +83,7 @@ const update = async (userId) => {
 const remove = async (userId) => {
   try {
     await search(userId);
-    await knex('users').where('id', userId).del();
+    await knex(table).where('id', userId).del();
     return;
   } catch (error) {
     throw error;
@@ -89,6 +91,7 @@ const remove = async (userId) => {
 }
 
 module.exports = {
+  table: table,
   createTable: createTable,
   list: list,
   search: search,
