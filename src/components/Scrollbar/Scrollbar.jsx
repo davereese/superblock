@@ -65,8 +65,10 @@ class Editor extends React.Component {
   
     const dragEnd = (event) => {
       dragging = false;
-      this.scrollContainerRef.current.style.pointerEvents = 'initial';
-      this.scrollContainerRef.current.style.userSelect = 'initial';
+      if ( this.scrollContainerRef.current !== null) {
+        this.scrollContainerRef.current.style.pointerEvents = 'initial';
+        this.scrollContainerRef.current.style.userSelect = 'initial';
+      }
     }
 
     window.addEventListener('mousemove', dragMove);

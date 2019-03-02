@@ -14,6 +14,7 @@ body {
     z-index: 10;
     box-sizing: border-box;
     display: flex;
+    justify-content: space-between;
     padding: 0 20px;
     height: 77px;
     width: 100%;
@@ -24,36 +25,19 @@ body {
       width: 153px;
       height: 33px;
     }
-  }
 
-  .sidebar {
-    grid-area: sidebar;
-    transition: all 0.5s;
+    .user {
+      text-align: right;
 
-    &.collapsed {
-      @include for-tablet-landscape-up () {
-        opacity: 0;
-        transform: translateX(calc(-45.5% - 20px));
+      a {
+        color: $highlight-color;
+        font-size: px-to-rem(14px);
+        text-decoration: none;
       }
 
-      @include for-desktop-up () {
-        transform: translateX(calc(-46.5% - 20px));
-      }
-    }
-  }
-
-  .content {
-    grid-area: content;
-    margin-top: 3px;
-    transition: transform 0.5s;
-
-    &.collapsed {
-      @include for-tablet-landscape-up () {
-        transform: translateX(calc(-14% - 20px));
-      }
-
-      @include for-desktop-up () {
-        transform: translateX(calc(-11% - 20px));
+      &__details {
+        line-height: 1.1;
+        color: $text-light;
       }
     }
   }
@@ -70,6 +54,7 @@ body {
     padding: 87px 20px 0;
     margin: 0 auto;
     max-width: 1600px;
+    min-height: calc(100vh - 40px);
 
     @include for-tablet-landscape-up () {
       grid-template-areas: 'sidebar content';
@@ -81,8 +66,63 @@ body {
     }
   }
 
+  .sidebar {
+    grid-area: sidebar;
+
+    @include for-tablet-landscape-up () {
+      opacity: 0;
+      transform: translateX(calc(-45.5% - 20px));
+    }
+
+    @include for-desktop-up () {
+      transform: translateX(calc(-46.5% - 20px));
+    }
+
+    // expanded = true
+    // collapsed = false
+    &.true,
+    &.false {
+      transition: all 0.5s;
+    }
+
+    &.true {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .content {
+    grid-area: content;
+    margin-top: 3px;
+
+    @include for-tablet-landscape-up () {
+      transform: translateX(calc(-14% - 20px));
+    }
+
+    @include for-desktop-up () {
+      transform: translateX(calc(-10.5% - 20px));
+    }
+
+    // expanded = true
+    // collapsed = false
+    &.true,
+    &.false {
+      transition: transform 0.5s;
+    }
+
+    &.true {
+      transform: none;
+    }
+  }
+
   footer {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     p {
+      margin: 0;
       color: $placeholder-color;
       text-align: center;
       font-size: px-to-rem(9px);
