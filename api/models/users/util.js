@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const knex = require('../../services/knex');
 const secretKey = require('../../config').SECRET_KEY;
-const table = require('./table');
+const table = require('./index').table;
 
 const generateToken = (payload) => {
   return jwt.sign(payload, secretKey);

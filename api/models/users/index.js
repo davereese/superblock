@@ -3,6 +3,14 @@ const util = require('./util');
   
 const table = 'users';
 
+const columns = [
+  'username',
+  'password',
+  'email',
+  'token',
+  'dateJoined',
+];
+
 const createTable = (schema) => {
   schema.increments();
   schema.string('username');
@@ -71,10 +79,19 @@ const create = async (request) => {
   }
 }
 
-const update = async (userId) => {
+const update = async (userId, requestBody) => {
+  let payload = {};
+  
+  // copy valid user fields from request body
+  Object.keys(requestBody).forEach(key => {
+    if (columns.includes(key)) {
+      payload[key] = requestBody[key];
+    }
+  });
+  
+  // update user in db
   try {
-    await search(userId);
-    // todo
+    return await knex(table).where({id: userId}).update(payload);
   } catch (error) {
     throw error;
   }

@@ -72,8 +72,7 @@ const USERS_ENDPOINT = '/users';
 // list
 router.get(USERS_ENDPOINT, async (req, res) => {
   try {
-    const users = await users.list();
-    return res.status(200).json(users);
+    return res.status(200).json(await users.list());
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -96,9 +95,10 @@ router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await users.search(userId);
+    await users.update(userId, req.body);
+    return res.status(202).send();
   } catch (error) {
-
+    return res.status(500).json(error);
   }
 });
 
