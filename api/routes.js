@@ -1,8 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const utilities = require('./utilities');
-const Users = require('./models/users');
+const util = require('./models/users/util');
+const users = require('./models/users');
 
 // ping test
 router.get('/ping', (req, res) => {
@@ -15,29 +15,29 @@ router.post('/login', async (req, res) => {
   const password = req.body.password;
   
   try {
-    const user = await Users.search(username);
-    const validPassword = await utilities.checkPassword(password, user.password);
+    const user = await users.search(username);
+    const validPassword = await util.checkPassword(password, user.password);
     if (validPassword) {
       return res.status(200).json(user);
     } else{
       return res.status(401).json('failed to validate password');
     }
   } catch (error) {
-    return res.status(404).json(error);
+    return res.status(404).send(error);
   }
 });
 
 // create new user
 router.post('/users', async (req, res) => {
   if (!req.body.username || !req.body.password) {
-    return utilities.returnError(res, 'username and password are required', 400);
+    return res.status(400).json('username and password are required');
   }
   
   try {
-    const user = await Users.create(req.body);
+    const user = await users.create(req.body);
     return res.status(201).json(user);
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).send(error);
   }
 });
 
@@ -51,10 +51,10 @@ router.use((req, res, next) => {
       req.user = jwt.verify(token, secretKey);
       next();
     } catch (error) {
-      return utilities.returnError(res, 'invalid token', 401);
+      return res.status(401).json('invalid token');
     }
   } else {
-    return utilities.returnError(res, 'no token present in headers', 401);
+    return res.status(401).json('no token present in headers');
   }
 });
 
@@ -66,28 +66,51 @@ router.param('userId', (req, res, next) => {
   next();
 });
 
-// users
+/* USERS */
 const USERS_ENDPOINT = '/users';
 
+// list
 router.get(USERS_ENDPOINT, async (req, res) => {
   try {
-    const users = await Users.list();
-    return res.status(200).json(users);
+    return res.status(200).json(await users.list());
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).send(error);
   }
 });
 
-// TODO: query user endpoint
+// search
+router.get(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+  const userId = req.params.userId;
+  
+  try {
+    const user = await users.search(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
 
+// update
+router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    await users.update(userId, req.body);
+    return res.status(202).send();
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+
+// delete
 router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {
-    await Users.delete(userId);
+    await users.remove(userId);
     return res.status(202).send();
   } catch (error) {
-    return utilities.returnError(res, error);
+    return res.status(500).send(error);
   }
 });
 
