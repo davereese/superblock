@@ -1,7 +1,7 @@
 const knex = require('../../services/knex');
 const util = require('./util');
   
-const table = 'users';
+const name = 'users';
 
 const columns = [
   'username',
@@ -18,15 +18,29 @@ const createTable = (schema) => {
   schema.string('email');
   schema.string('token');
   schema.dateTime('dateJoined');
-}
+};
 
-const list = async () => {
+const authenticate = async (username, password) => {
   try {
-    return await knex(table);
+    const user = await search(username);
+    const validPassword = await util.checkPassword(password, user.password);
+    if (validPassword) {
+      return user;
+    } else{
+      return null;
+    }
   } catch (error) {
     throw error;
   }
-}
+};
+
+const list = async () => {
+  try {
+    return await knex(name);
+  } catch (error) {
+    throw error;
+  }
+};
 
 const search = async (searchValue) => {
   let users;
@@ -43,7 +57,7 @@ const search = async (searchValue) => {
   } else {
     throw `Unable to find user: ${searchValue}`;
   }
-}
+};
 
 const create = async (request) => {
   const username = request.username;
@@ -51,8 +65,9 @@ const create = async (request) => {
   const email = request.email;
 
   try {
+    console.log(util);
     // check that username doesn't already exist
-    await util.duplicateUserCheck(username)
+    await util.duplicateUserCheck(username);
   
     // hash user password
     const hashedPassword = await util.hashPassword(password)
@@ -71,13 +86,13 @@ const create = async (request) => {
     };
     
     // save user to db
-    await knex(table).insert(user)
+    await knex(name).insert(user)
 
     return user;
   } catch (error) {
     return error;
   }
-}
+};
 
 const update = async (userId, requestBody) => {
   let payload = {};
@@ -91,28 +106,29 @@ const update = async (userId, requestBody) => {
   
   // update user in db
   try {
-    return await knex(table).where({id: userId}).update(payload);
+    return await knex(name).where({id: userId}).update(payload);
   } catch (error) {
     throw error;
   }
-}
+};
 
 const remove = async (userId) => {
   try {
     await search(userId);
-    await knex(table).where('id', userId).del();
+    await knex(name).where('id', userId).del();
     return;
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
-  table: table,
+  name: name,
   createTable: createTable,
   list: list,
   search: search,
   create: create,
   update: update,
   remove: remove,
-}
+  authenticate: authenticate,
+};

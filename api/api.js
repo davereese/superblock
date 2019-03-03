@@ -39,12 +39,12 @@ const server = http.createServer(app);
 
 // start server
 server.listen(port, async () => {
-  console.log(`API running on localhost:${port}`)
+  console.log(`API running on localhost:${port}`);
   
   // on server load, create users table if necessary
-  const exists = await knex.schema.hasTable(users.table);
+  const exists = await knex.schema.hasTable(users.name);
   if (!exists) {
-    await knex.schema.createTable(users.table, schema => {
+    await knex.schema.createTable(users.name, schema => {
         users.createTable(schema);
     });
   }

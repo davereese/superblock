@@ -1,7 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const util = require('./models/users/util');
 const users = require('./models/users');
 
 // ping test
@@ -15,11 +14,10 @@ router.post('/login', async (req, res) => {
   const password = req.body.password;
   
   try {
-    const user = await users.search(username);
-    const validPassword = await util.checkPassword(password, user.password);
-    if (validPassword) {
+    const user = await users.authenticate(username, password);
+    if (user) {
       return res.status(200).json(user);
-    } else{
+    } else {
       return res.status(401).json('failed to validate password');
     }
   } catch (error) {
@@ -44,7 +42,7 @@ router.post('/users', async (req, res) => {
 // add authentication middleware for all other routes
 router.use((req, res, next) => {
   const token = req.headers['authorization'];
-  const secretKey = require('./config').SECRET_KEY;
+  const secretKey = require('./config').secretKey;
   
   if (token) {
     try {
@@ -98,7 +96,7 @@ router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
     await users.update(userId, req.body);
     return res.status(202).send();
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(400).json(error);
   }
 });
 
