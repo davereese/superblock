@@ -16,7 +16,7 @@ const createTable = (schema) => {
   schema.string('username');
   schema.string('password');
   schema.string('email');
-  schema.string('token');
+  schema.string('token', 1000);
   schema.dateTime('dateJoined');
 };
 
@@ -65,28 +65,26 @@ const create = async (request) => {
   const email = request.email;
 
   try {
-    console.log(util);
     // check that username doesn't already exist
     await util.duplicateUserCheck(username);
   
     // hash user password
-    const hashedPassword = await util.hashPassword(password)
-
-    // create jwt token
-    const payload = { user: username };
-    const token = util.generateToken(payload);
+    const hashedPassword = await util.hashPassword(password);
     
     // create user object
     const user = {
       username: username,
       password: hashedPassword,
       email: email,
-      token: token,
       dateJoined: new Date(),
     };
+
+    // create jwt token;
+    const token = util.generateToken(user);
+    user.token = token;
     
     // save user to db
-    await knex(name).insert(user)
+    await knex(name).insert(user);
 
     return user;
   } catch (error) {
