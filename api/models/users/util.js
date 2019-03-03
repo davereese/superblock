@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const knex = require('../../services/knex');
-const secretKey = require('../../config').SECRET_KEY;
-const table = require('./index').table;
+const secretKey = require('../../config').secretKey;
 
 const generateToken = (payload) => {
   return jwt.sign(payload, secretKey);
@@ -17,7 +16,8 @@ const checkPassword = async (password, hash) => {
 }
 
 const duplicateUserCheck = async (username) => {
-  const matchingUsers = await knex(table).where('username', username);
+  const name = require('./index').name;
+  const matchingUsers = await knex(name).where('username', username);
   
   if (matchingUsers.length > 0) {
     throw 'username already exists';

@@ -3,7 +3,9 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const routes = require('./routes');
+const loginRoutes = require('./routes/login');
+const userRoutes = require('./routes/users');
+const authMiddleware = require('./middleware/auth');
 const knex = require('./services/knex');
 const users = require('./models/users');
 
@@ -23,7 +25,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../build')));
 
 // use api routes
-app.use('/api', routes);
+app.use('/api', [
+  loginRoutes,
+  authMiddleware,
+  userRoutes,
+]);
 
 // catch all other routes and return the index file
 app.get('*', (req, res) => {
@@ -39,12 +45,12 @@ const server = http.createServer(app);
 
 // start server
 server.listen(port, async () => {
-  console.log(`API running on localhost:${port}`)
+  console.log(`API running on localhost:${port}`);
   
   // on server load, create users table if necessary
-  const exists = await knex.schema.hasTable(users.table);
+  const exists = await knex.schema.hasTable(users.name);
   if (!exists) {
-    await knex.schema.createTable(users.table, schema => {
+    await knex.schema.createTable(users.name, schema => {
         users.createTable(schema);
     });
   }
