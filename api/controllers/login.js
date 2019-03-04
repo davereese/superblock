@@ -1,11 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const users = require('../models/users');
+const router = express.Router();
 
-// ping test
-router.get('/ping', (req, res) => {
-  return res.status(200).json('pong!');
-});
 
 // user login
 router.post('/login', async (req, res) => {

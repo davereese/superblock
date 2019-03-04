@@ -1,13 +1,20 @@
+// vendor
 const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const loginRoutes = require('./routes/login');
-const userRoutes = require('./routes/users');
+// controllers
+const statusController = require('./controllers/status');
+const loginController = require('./controllers/login');
+const usersController = require('./controllers/users');
+// middleware
 const authMiddleware = require('./middleware/auth');
+// services
 const knex = require('./services/knex');
+// models
 const users = require('./models/users');
+
 
 // init express
 const app = express();
@@ -24,11 +31,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // point static path to build
 app.use(express.static(path.join(__dirname, '../build')));
 
-// use api routes
+// configure router
 app.use('/api', [
-  loginRoutes,
+  statusController,
+  loginController,
   authMiddleware,
-  userRoutes,
+  usersController,
 ]);
 
 // catch all other routes and return the index file
@@ -37,7 +45,7 @@ app.get('*', (req, res) => {
 });
 
 // get port from environment and set
-const port = process.env.PORT || '4000';
+const port = process.env.SUPERBLOCK_PORT || '4000';
 app.set('port', port);
 
 // create HTTP server

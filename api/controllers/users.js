@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const users = require('../models/users');
 
+
+const endpoint = '/users';
+
 // middleware to convert userId to number if present
 router.param('userId', (req, res, next) => {
   if (req.params.userId) {
@@ -10,11 +13,8 @@ router.param('userId', (req, res, next) => {
   next();
 });
 
-/* USERS */
-const USERS_ENDPOINT = '/users';
-
 // list
-router.get(USERS_ENDPOINT, async (req, res) => {
+router.get(endpoint, async (req, res) => {
   try {
     return res.status(200).json(await users.list());
   } catch (error) {
@@ -23,7 +23,7 @@ router.get(USERS_ENDPOINT, async (req, res) => {
 });
 
 // search
-router.get(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+router.get(`${endpoint}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {
@@ -35,7 +35,7 @@ router.get(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
 });
 
 // update
-router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+router.put(`${endpoint}/:userId`, async (req, res) => {
   const userId = req.params.userId;
 
   try {
@@ -47,7 +47,7 @@ router.put(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
 });
 
 // delete
-router.delete(`${USERS_ENDPOINT}/:userId`, async (req, res) => {
+router.delete(`${endpoint}/:userId`, async (req, res) => {
   const userId = req.params.userId;
   
   try {

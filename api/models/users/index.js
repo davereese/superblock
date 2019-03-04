@@ -1,6 +1,7 @@
 const knex = require('../../services/knex');
 const util = require('./util');
   
+
 const name = 'users';
 
 const columns = [

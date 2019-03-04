@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const knex = require('../../services/knex');
-const secretKey = require('../../config').secretKey;
+
 
 const generateToken = (payload) => {
+  const secretKey = require('../../config').secretKey;
   return jwt.sign(payload, secretKey);
 }
 
