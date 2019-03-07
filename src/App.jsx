@@ -24,12 +24,12 @@ class App extends Component {
 
     const handleLogIn = (response) => {
       this.setState({currentUser: response});
-      sessionStorage.setItem('currentUser', JSON.stringify(response));
+      localStorage.setItem('currentUser', JSON.stringify(response));
     }
 
     const handleLogOut = () => {
       this.setState({currentUser: null});
-      sessionStorage.removeItem('currentUser');
+      localStorage.removeItem('currentUser');
     }
 
     return (
