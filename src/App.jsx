@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import logo from './resources/images/logo.svg';
+import Header from './components/Header/Header';
 import Editing from './views/Editing/Editing';
 import Login from './views/Login/Login';
 
@@ -18,10 +18,6 @@ class App extends Component {
   }
 
   render() {
-    const updateLocation = (e) => {
-      this.setState({location: e.target.pathname ? e.target.pathname : '/'});
-    }
-
     const handleLogIn = (response) => {
       this.setState({currentUser: response});
       localStorage.setItem('currentUser', JSON.stringify(response));
@@ -36,28 +32,7 @@ class App extends Component {
       <div className="app">
         <Router>
           <React.Fragment>
-            <header>
-              <Link to="/" onClick={updateLocation}>
-                <img src={logo} className="logo" alt="superblock" />
-              </Link>
-              <div className="user">
-                {
-                  this.state.currentUser !== null ?
-                    <span className="user__details">
-                      {this.state.currentUser.username}<br />
-                      <button
-                        type="button"
-                        className="no-button inline-button"
-                        onClick={handleLogOut}
-                      >Log Out</button>
-                    </span> : null
-                }
-                {
-                  this.state.location !== '/login' && this.state.currentUser === null ?
-                    <Link to="/login" onClick={updateLocation}>Log In</Link> : null
-                }
-              </div>
-            </header>
+            <Header user={this.state.currentUser} onLogout={handleLogOut} />
             <div className="main">
               <Route path="/" exact component={Editing} />
               <Route path="/login" exact render={props => (
