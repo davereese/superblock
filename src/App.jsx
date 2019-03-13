@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import Header from './components/Header/Header';
 import Editing from './views/Editing/Editing';
@@ -12,7 +12,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: '',
       currentUser: currentUser,
     }
   }
@@ -30,20 +29,20 @@ class App extends Component {
 
     return (
       <div className="app">
-        <Router>
-          <React.Fragment>
-            <Header user={this.state.currentUser} onLogout={handleLogOut} />
-            <div className="main">
+        <>
+          <Header user={this.state.currentUser} onLogout={handleLogOut} />
+          <div className="main">
+            <Switch>
               <Route path="/" exact component={Editing} />
               <Route path="/login" exact render={props => (
                 <Login onLoginSuccess={handleLogIn} history={props.history} />
               )} />
-            </div>
-            <footer>
-              <p>&copy; ${date.getFullYear()} SuperBlock. All rights reserved.</p>
-            </footer>
-          </React.Fragment>
-        </Router>
+            </Switch>
+          </div>
+          <footer>
+            <p>&copy; ${date.getFullYear()} SuperBlock. All rights reserved.</p>
+          </footer>
+        </>
       </div>
     );
   }

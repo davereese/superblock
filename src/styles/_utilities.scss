@@ -23,3 +23,8 @@
 @mixin for-big-desktop-up {
   @media (min-width: $big-desktop) { @content; }
 }
+
+// UTILITY CLASSES
+.center-text {
+  text-align: center;
+}

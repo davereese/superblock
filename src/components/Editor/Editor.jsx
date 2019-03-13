@@ -181,7 +181,7 @@ class Editor extends React.Component {
     };
 
     return (
-      <React.Fragment>
+      <>
         <label className="editor__label">
         {this.state.editingTitle === true ?
           <input
@@ -227,7 +227,7 @@ class Editor extends React.Component {
             onClick={handleCopy}
           >COPY</div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -10,6 +10,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
+      error: null,
     }
   }
 
@@ -22,13 +23,13 @@ class Login extends React.Component {
       this.props.onLoginSuccess(response.data);
       this.props.history.push('/');
     } catch (error) {
-      console.error(error);
+      this.setState({error: error.response.status});
     }
   }
 
   render() {
     const handleChange = (e) => {
-      this.setState({[e.target.id]: e.target.value});
+      this.setState({[e.target.id]: e.target.value, error: null});
     }
   
     const handleLogin = (e) => {
@@ -36,11 +37,24 @@ class Login extends React.Component {
       this.loginUser();
     }
 
+    const userError = this.state.error === 404 ? 'error' : '';
+    const passError = this.state.error === 401 ? 'error' : '';
+
     return (
-      <React.Fragment>
+      <>
         <div className="content login-container" role="main">
           <div className="login-container__form">
             <h1 className="header-lg">Log In</h1>
+            {
+              this.state.error === 404 ?
+                <p className={`error center-text`}>No user with that name found. Please try again.</p>
+                : null
+            }
+            {
+              this.state.error === 401 ?
+                <p className={`error center-text`}>Incorrect password. Please try again.</p>
+                : null
+            }
             <form action="">
               <label form="username">Username</label><br />
               <input
@@ -49,6 +63,7 @@ class Login extends React.Component {
                 autoComplete="off"
                 value={this.state.username}
                 onChange={handleChange}
+                className={userError}
               /><br />
               <label form="password">Password</label><br />
               <input
@@ -56,6 +71,7 @@ class Login extends React.Component {
                 id="password"
                 value={this.state.password}
                 onChange={handleChange}
+                className={passError}
               />
               <button
                 type="submit"
@@ -64,7 +80,7 @@ class Login extends React.Component {
             </form>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
