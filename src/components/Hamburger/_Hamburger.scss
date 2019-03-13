@@ -1,33 +1,33 @@
 .hamburger {
   display: block;
   position: absolute;
-  top: 4px;
+  top: 6px;
   margin: 0;
   padding: 0;
-  width: 9px;
-  height: 9px;
+  width: 19px;
+  height: 13px;
   border-radius: 0;
   border: none;
   border-top: 1px solid $highlight-color;
-  transition: border 0.2s;
+  transition: border 0.2s, top 0.2s;
 
   &::before,
   &::after {
     content: '';
     display: block;
     position: absolute;
-    width: 9px;
+    width: 19px;
     height: 1px;
     background-color: $highlight-color;
     transition: background-color 0.2s, transform 2s;
   }
 
   &::before {
-    margin-top: -4px;
+    margin-top: -6px;
   }
 
   &::after {
-    margin-top: 2px;
+    margin-top: 4.3px;
   }
 
   &:hover,
@@ -43,6 +43,7 @@
 
   &.expanded {
     border-color: transparent;
+    top: 8px;
 
     &::before {
       animation: flipUpExpand 0.5s;
@@ -60,14 +61,14 @@
 
   &.collapsed {
     &::before {
-      margin-top: -4px;
+      margin-top: -6px;
       animation: flipUpCollapse 0.5s;
       animation-delay: 0.07s;
       transform-origin: top right;
     }
   
     &::after {
-      margin-top: 2px;
+      margin-top: 4.3px;
       animation: flipDownCollapse 0.5s;
       transform-origin: bottom right;
     }
@@ -83,14 +84,14 @@
     left: -8px;
   }
   100% {
-    transform: rotate(225deg) translate(5px, -6px);
+    transform: rotate(225deg) translate(15px, -11px);
     left: 0;
   }
 }
 
 @keyframes flipUpCollapse {
   0% {
-    transform: rotate(225deg) translate(5px, -6px);
+    transform: rotate(225deg) translate(15px, -11px);
     left: 0px;
   }
   25% {
@@ -108,17 +109,17 @@
     left: 0px;
   }
   25% {
-    left: -8px;
+    left: -20px;
   }
   100% {
-    transform: rotate(-225deg) translate(5px, 6px);
+    transform: rotate(-225deg) translate(12px, 14px);
     left: 0px;
   }
 }
 
 @keyframes flipDownCollapse {
   0% {
-    transform: rotate(-225deg) translate(5px, 6px);
+    transform: rotate(-225deg) translate(12px, 14px);
     left: 0px;
   }
   25% {

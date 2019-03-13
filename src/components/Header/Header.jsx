@@ -18,7 +18,7 @@ function Header({
 
   return(
     <header>
-      <Link to="/">
+      <Link to="/" className="logoLink">
         <img src={logo} className="logo" alt="superblock" />
       </Link>
       <div className="user">

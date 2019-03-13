@@ -10,6 +10,10 @@ header {
   align-items: center;
   background-color: $body-bg;
 
+  .logoLink {
+    line-height: 0;
+  }
+
   .logo {
     width: 153px;
     height: 33px;

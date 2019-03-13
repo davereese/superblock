@@ -1,9 +1,8 @@
 .sidebar-toggle {
-  transform: translateY(5.5px);
   display: none;
   float: left;
-  width: 9px;
-  height: 9px;
+  width: 19px;
+  height: 19px;
   z-index: 5;
 
   @include for-tablet-landscape-up () {
