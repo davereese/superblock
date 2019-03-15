@@ -1,6 +1,5 @@
 const knex = require('../../services/knex');
 const util = require('./util');
-  
 
 const name = 'users';
 
@@ -19,6 +18,7 @@ const createTable = (schema) => {
   schema.string('email');
   schema.string('token', 1000);
   schema.dateTime('dateJoined');
+  schema.specificType('blocks', 'integer ARRAY');
 };
 
 const authenticate = async (username, password) => {
@@ -111,6 +111,21 @@ const update = async (userId, requestBody) => {
   }
 };
 
+const addBlock = async (username, blockId) => {
+  const usersBlocks = await knex('users')
+    .where({username: username})
+    .first('blocks')
+    .then((row) => {
+      return row.blocks !== null ? row.blocks : [];
+    });
+
+  usersBlocks.push(blockId);
+
+  await knex('users')
+    .where({username: username})
+    .update({blocks: usersBlocks});
+};
+
 const remove = async (userId) => {
   try {
     await search(userId);
@@ -129,5 +144,6 @@ module.exports = {
   create: create,
   update: update,
   remove: remove,
+  addBlock: addBlock,
   authenticate: authenticate,
 };

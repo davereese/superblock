@@ -8,12 +8,14 @@ const cors = require('cors');
 const statusController = require('./controllers/status');
 const loginController = require('./controllers/login');
 const usersController = require('./controllers/users');
+const blocksController = require('./controllers/blocks');
 // middleware
 const authMiddleware = require('./middleware/auth');
 // services
 const knex = require('./services/knex');
 // models
 const users = require('./models/users');
+const blocks = require('./models/blocks');
 
 
 // init express
@@ -37,6 +39,7 @@ app.use('/api', [
   loginController,
   authMiddleware,
   usersController,
+  blocksController,
 ]);
 
 // catch all other routes and return the index file
@@ -55,11 +58,18 @@ const server = http.createServer(app);
 server.listen(port, async () => {
   console.log(`API running on localhost:${port}`);
   
-  // on server load, create users table if necessary
-  const exists = await knex.schema.hasTable(users.name);
-  if (!exists) {
+  // on server load, create tables if necessary
+  const usersExists = await knex.schema.hasTable(users.name);
+  if (!usersExists) {
     await knex.schema.createTable(users.name, schema => {
-        users.createTable(schema);
+      users.createTable(schema);
+    });
+  }
+
+  const blocksExists = await knex.schema.hasTable(blocks.name);
+  if (!blocksExists) {
+    await knex.schema.createTable(blocks.name, schema => {
+      blocks.createTable(schema);
     });
   }
 });
