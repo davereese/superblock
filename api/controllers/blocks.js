@@ -8,7 +8,7 @@ const endpoint = '/blocks';
 // create new block
 router.post(endpoint, async (req, res) => {
   if (!req.body.content) {
-    return res.status(400).json('block content required');
+    return res.status(400).send('block content required');
   }
   
   try {
