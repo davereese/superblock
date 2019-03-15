@@ -16,7 +16,7 @@ router.post(endpoint, async (req, res) => {
     const block = await blocks.create(req.body);
 
     // save block's ID to user
-    await users.addBlock(req.user, block.id);
+    await users.addBlock(req.user.username, block.id);
 
     return res.status(201).json(block);
   } catch (error) {
