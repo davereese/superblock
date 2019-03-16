@@ -112,18 +112,37 @@ const update = async (userId, requestBody) => {
 };
 
 const addBlock = async (username, blockId) => {
-  const usersBlocks = await knex('users')
-    .where({username: username})
-    .first('blocks')
-    .then((row) => {
-      return row.blocks !== null ? row.blocks : [];
-    });
+  try {
+    const usersBlocks = await knex(name)
+      .where({username: username})
+      .first('blocks')
+      .then((row) => {
+        return row.blocks !== null ? row.blocks : [];
+      });
 
-  usersBlocks.push(blockId);
+    usersBlocks.push(blockId);
 
-  await knex('users')
-    .where({username: username})
-    .update({blocks: usersBlocks});
+    await knex(name)
+      .where({username: username})
+      .update({blocks: usersBlocks});
+  } catch (error) {
+    return error;
+  }
+};
+
+const hasBlock = async (username, blockId) => {
+  try {
+    const blocks = await knex(name)
+      .where({username: username})
+      .first('blocks')
+      .then((row) => {
+        return row.blocks;
+      });
+    
+    return blocks.includes(blockId);
+  } catch (error) {
+    return error;
+  }
 };
 
 const remove = async (userId) => {
@@ -145,5 +164,6 @@ module.exports = {
   update: update,
   remove: remove,
   addBlock: addBlock,
+  hasBlock: hasBlock,
   authenticate: authenticate,
 };

@@ -31,18 +31,27 @@ class Editor extends React.Component {
 
   componentDidMount() {
     // Set customTitle if the title initializes as something other than 'Block'
-    if (this.props.blockTitle !== 'Block') {
-      this.setState({customTitle: true});
-    }
+    this.customTitleCheck();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.blockTitle !== this.props.blockTitle && !this.state.customTitle) {
       this.setState({title: this.props.blockTitle});
+      this.customTitleCheck();
+    }
+    
+    if (prevProps.blockContent !== this.props.blockContent) {
+      this.setState({textarea: this.props.blockContent});
     }
 
     if (prevProps.language !== this.props.language) {
       Prism.highlightAll();
+    }
+  }
+
+  customTitleCheck() {
+    if (this.props.blockTitle !== 'Block') {
+      this.setState({customTitle: true});
     }
   }
 

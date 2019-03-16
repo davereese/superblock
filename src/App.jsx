@@ -36,7 +36,9 @@ class App extends Component {
           <Header user={this.state.currentUser} onLogout={handleLogOut} />
           <div className="main">
             <Switch>
-              <Route path="/" exact component={Editing} />
+              <Route exact path={["/block/:id", "/"]} render={props => (
+                <Editing user={this.state.currentUser} {...props} />
+              )} />
               <Route path="/login" exact render={props => (
                 <Login onLoginSuccess={handleLogIn} history={props.history} />
               )} />

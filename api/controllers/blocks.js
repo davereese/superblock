@@ -8,7 +8,7 @@ const endpoint = '/blocks';
 // create new block
 router.post(endpoint, async (req, res) => {
   if (!req.body.content) {
-    return res.status(400).send('block content required');
+    return res.status(400).send('Block content required');
   }
   
   try {
@@ -21,6 +21,25 @@ router.post(endpoint, async (req, res) => {
     return res.status(201).json(block);
   } catch (error) {
     return res.status(500).send(error);
+  }
+});
+
+router.get(`${endpoint}/:blockId`, async (req, res) => {
+  const blockId = parseInt(req.params.blockId);
+  const username = req.user.username;
+  
+  try {
+    // check to make sure current user has this id assigned to them
+    const userHasBlock = await users.hasBlock(username, blockId);
+
+    if (userHasBlock) {
+      const block = await blocks.get(blockId);
+      res.status(200).json(block);
+    } else {
+      throw `That block does not belong to ${username}`;
+    }
+  } catch (error) {
+    res.status(404).send(error);
   }
 });
 

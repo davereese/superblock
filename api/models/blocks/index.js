@@ -26,7 +26,6 @@ const create = async (request) => {
   const content = request.content;
   const language = request.language;
   const tags = request.tags;
-  const userId = request.userId;
 
   try {
     // create block object
@@ -49,8 +48,20 @@ const create = async (request) => {
   }
 };
 
+const get = async (blockId) => {
+  try {
+    const block = await knex(name)
+      .where('id', blockId);
+
+    return block;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   name: name,
   createTable: createTable,
   create: create,
+  get: get
 }
