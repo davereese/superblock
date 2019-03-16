@@ -57,6 +57,10 @@ select {
   display: grid;
   grid-template-columns: calc(100% - 64px) 44px;
   grid-column-gap: 20px;
+
+  button {
+    width: inherit;
+  }
 }
 
 button {
