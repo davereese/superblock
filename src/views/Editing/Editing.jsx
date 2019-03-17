@@ -21,12 +21,18 @@ class Editing extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id && this.props.match.params.id) {
+      this.queryBlock(this.props.match.params.id);
+    }
+  }
+
   async queryBlock(blockId) {
     try {
       const response = await axios.get(`http://localhost:4000/api/blocks/${blockId}`, {
         headers: {
           'authorization': this.props.user.token
-        }
+        },
       });
       const data = response.data[0];
       this.setState({
@@ -41,19 +47,46 @@ class Editing extends React.Component {
     }
   }
 
+  async saveBlock() {
+    try {
+      await axios.post(`http://localhost:4000/api/blocks/`, {
+        content: this.state.content,
+        title: this.state.title,
+        language: this.state.language,
+        tags: this.state.tags,
+      },{
+        headers: {
+          'authorization': this.props.user.token
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
-    const handleInputChange = (e) => {
-      const field = e.target.id;
+    const handleLanguageChange = (e) => {
       this.setState({title: `${e.target.value} block`});
-      this.setState({[field]: e.target.value});
+      this.setState({language: e.target.value});
     }
 
     const handleSidebarToggle = (e) => {
       this.setState({isOpen: !this.state.isOpen});
     }
 
+    const handleUpdate = (update) => {
+      this.setState({
+        title: update.title,
+        content: update.content
+      });
+    }
+
     const addTag = (e) => {
       // add tag
+    }
+
+    const handleSaveBlock = (e) => {
+      this.saveBlock();
     }
 
     return (
@@ -65,8 +98,8 @@ class Editing extends React.Component {
           <label htmlFor="language">Language</label><br />
           <select
             id="language"
-            value={this.state.target}
-            onChange={handleInputChange}
+            value={this.state.language}
+            onChange={handleLanguageChange}
           >
             <option value=''>Choose a Language</option>
             <option value='js'>JavaScript</option>
@@ -89,6 +122,12 @@ class Editing extends React.Component {
             : null
           }
 
+          <button
+            type="button"
+            className="full-width"
+            onClick={handleSaveBlock}
+          >Save</button>
+
         </div>
         <div
           className={`content ${this.state.isOpen}`}
@@ -104,6 +143,7 @@ class Editing extends React.Component {
             blockTitle={this.state.title}
             blockContent={this.state.content}
             language={this.state.language}
+            onUpdate={handleUpdate}
           />
         </div>
       </React.Fragment>

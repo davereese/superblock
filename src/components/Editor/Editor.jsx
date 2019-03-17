@@ -45,7 +45,9 @@ class Editor extends React.Component {
     }
 
     if (prevProps.language !== this.props.language) {
-      Prism.highlightAll();
+      this.setState({language: this.props.language}, () => {
+        Prism.highlightAll()
+      });
     }
   }
 
@@ -56,11 +58,21 @@ class Editor extends React.Component {
   }
 
   render() {
+    const updateContent = () => {
+      this.props.onUpdate({
+        title: this.state.title,
+        content: this.state.textarea,
+      });
+    }
+
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
         const newHeight = this.textareaRef.current.nextSibling.clientHeight;
         const parentHeight = this.textareaRef.current.parentNode.clientHeight;
-        this.setState({height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1});
+        this.setState(
+          {height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1},
+          updateContent()
+        );
         Prism.highlightAll();
       });
       // set focus
@@ -164,7 +176,9 @@ class Editor extends React.Component {
     }
 
     const handleTitleChange = (e) => {
-      this.setState({title: e.target.value});
+      this.setState({title: e.target.value}, () => {
+        updateContent()
+      });
 
       // Set the title as a custom one so we don't overwrite it if the language selection changes.
       if (!this.state.customTitle) {
@@ -245,6 +259,7 @@ Editor.propTypes = {
   blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
+  onUpdate: PropTypes.func,
 };
 
 Editor.defaultProps = {

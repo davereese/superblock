@@ -41,6 +41,10 @@ button {
     background-color: transparent;
   }
 
+  &.full-width {
+    width: 100%;
+  }
+
   &.error {
     border: 1px solid $text-error;
     color: $input-text;
