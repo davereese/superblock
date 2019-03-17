@@ -49,7 +49,7 @@ class Editing extends React.Component {
 
   async saveBlock() {
     try {
-      await axios.post(`http://localhost:4000/api/blocks/`, {
+      const block = await axios.post(`http://localhost:4000/api/blocks/`, {
         content: this.state.content,
         title: this.state.title,
         language: this.state.language,
@@ -59,6 +59,8 @@ class Editing extends React.Component {
           'authorization': this.props.user.token
         }
       });
+
+      this.props.history.push(`/block/${block.data.id}`);
     } catch (error) {
       console.error(error);
     }
