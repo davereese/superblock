@@ -199,10 +199,13 @@ class Editing extends React.Component {
             onClick={handleSidebarToggle}
           ><Hamburger open={this.state.isOpen ? true : false}></Hamburger>
           </button>
-          <button
-            className="button delete-block inline-button"
-            onClick={handleDeleteBlock}
-          >Delete</button>
+          {!this.state.isNew ?
+            <button
+              className="button delete-block inline-button"
+              onClick={handleDeleteBlock}
+            >Delete</button>
+            : null
+          }
           <Editor
             blockTitle={this.state.title}
             blockContent={this.state.content}
