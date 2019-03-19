@@ -13,6 +13,8 @@ class Editing extends React.Component {
       isOpen: '',
       title: 'Block',
       tags: [],
+      isNew: true,
+      customTitle: false,
     }
 
     // query the block
@@ -40,6 +42,8 @@ class Editing extends React.Component {
         title: data.title,
         language: data.language,
         tags: data.tags,
+        isNew: false,
+        customTitle: true,
       });
     } catch (error) {
       // handle error
@@ -66,10 +70,30 @@ class Editing extends React.Component {
     }
   }
 
+  async updateBlock() {
+    try {
+      await axios.put(`http://localhost:4000/api/blocks/${this.props.match.params.id}`, {
+        content: this.state.content,
+        title: this.state.title,
+        language: this.state.language,
+        tags: this.state.tags,
+      },{
+        headers: {
+          'authorization': this.props.user.token
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     const handleLanguageChange = (e) => {
-      this.setState({title: `${e.target.value} block`});
       this.setState({language: e.target.value});
+
+      if (!this.state.customTitle) {
+        this.setState({title: `${e.target.value} Block`});
+      }
     }
 
     const handleSidebarToggle = (e) => {
@@ -77,6 +101,10 @@ class Editing extends React.Component {
     }
 
     const handleUpdate = (update) => {
+      if (!this.state.customTitle && update.title !== this.state.title) {
+        this.setState({ customTitle: true });
+      }
+
       this.setState({
         title: update.title,
         content: update.content
@@ -88,7 +116,11 @@ class Editing extends React.Component {
     }
 
     const handleSaveBlock = (e) => {
-      this.saveBlock();
+      if (this.state.isNew) {
+        this.saveBlock();
+      } else {
+        this.updateBlock();
+      }
     }
 
     return (
@@ -128,7 +160,7 @@ class Editing extends React.Component {
             type="button"
             className="full-width"
             onClick={handleSaveBlock}
-          >Save</button>
+          >{ this.state.isNew ? 'Save' : 'Update' }</button>
 
         </div>
         <div
