@@ -94,6 +94,8 @@ button {
   }
 
   &.no-button {
+    display: inline;
+    width: auto;
     background: transparent;
     margin: 0;
     padding: 0;
@@ -103,5 +105,14 @@ button {
   &.inline-button {
     display: inline-block;
     width: auto;
+  }
+
+  &.close-button {
+    &::before {
+      content: '+';
+      display: inline-block;
+      transform: rotate(45deg) translate(px-to-rem(1.5px));
+      padding: 0 5px;
+    }
   }
 }

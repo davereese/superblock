@@ -17,6 +17,8 @@ class Editing extends React.Component {
       customTitle: false,
     }
 
+    this.tagInputRef = React.createRef();
+
     // query the block
     if (props.match.params.id) {
       this.queryBlock(props.match.params.id);
@@ -133,8 +135,18 @@ class Editing extends React.Component {
       });
     }
 
-    const addTag = (e) => {
-      // add tag
+    const handleAddTag = (e) => {
+      const tags = this.state.tags;
+      if (this.tagInputRef.current.value) {
+        tags.push(this.tagInputRef.current.value);
+        this.setState({tags: tags});
+      }
+    }
+
+    const handleDeleteTag = (index) => {
+      const tags = this.state.tags;
+      tags.splice(index, 1);
+      this.setState({tags: tags});
     }
 
     const handleSaveBlock = (e) => {
@@ -173,11 +185,32 @@ class Editing extends React.Component {
               <>
                 <label htmlFor="newtag">Tag</label><br />
                 <div className="input-and-button">
-                  <input type="text" id="newtag" />
-                  <button type="button" onClick={addTag}>+</button>
+                  <input
+                    type="text"
+                    id="newtag"
+                    ref={this.tagInputRef}
+                  />
+                  <button type="button" onClick={handleAddTag}>+</button>
                 </div>
-                <ul className="tagsList">
-                </ul>
+                {this.state.tags.length > 0 ?
+                  <ul className="tagsList">
+                    {this.state.tags.map((tag, index) => {
+                      return (
+                        <li
+                          className="tagsList__tag"
+                          key={index}
+                        >
+                          {tag}
+                          <button
+                            className="no-button close-button"
+                            onClick={(e) => {handleDeleteTag(index)}}
+                          ></button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  : null
+                }
               </>
             : null
           }
