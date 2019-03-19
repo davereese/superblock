@@ -9,3 +9,23 @@
     display: block;
   }
 }
+
+.delete-block {
+  position: absolute;
+  bottom: 35px;
+  left: 10px;
+  padding: 1px 15px 0;
+  margin: 0;
+  height: 17px;
+  @extend .label;
+  font-size: px-to-rem(9px);
+  line-height: 0;
+  z-index: 5;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}

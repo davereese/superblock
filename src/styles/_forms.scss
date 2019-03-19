@@ -40,10 +40,6 @@ button {
     background-color: transparent;
   }
 
-  &.full-width {
-    width: 100%;
-  }
-
   &.error {
     border: 1px solid $text-error;
     color: $input-text;
@@ -78,6 +74,10 @@ button {
   &:hover {
     background-color: darken($highlight-color, 43%);
     border-color: darken($highlight-color, 43%);
+  }
+
+  &.full-width {
+    width: 100%;
   }
 
   &.icon-button {

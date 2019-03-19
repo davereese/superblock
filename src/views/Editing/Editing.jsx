@@ -87,6 +87,28 @@ class Editing extends React.Component {
     }
   }
 
+  async deleteBlock() {
+    try {
+      await axios.delete(`http://localhost:4000/api/blocks/${this.props.match.params.id}`, {
+        headers: {
+          'authorization': this.props.user.token
+        }
+      });
+
+      this.setState({
+        content: '',
+        title: 'Block',
+        language: '',
+        tags: [],
+        isNew: true,
+        customTitle: false,
+      });
+      this.props.history.push('/');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     const handleLanguageChange = (e) => {
       this.setState({language: e.target.value});
@@ -121,6 +143,10 @@ class Editing extends React.Component {
       } else {
         this.updateBlock();
       }
+    }
+
+    const handleDeleteBlock = () => {
+      this.deleteBlock();
     }
 
     return (
@@ -173,6 +199,10 @@ class Editing extends React.Component {
             onClick={handleSidebarToggle}
           ><Hamburger open={this.state.isOpen ? true : false}></Hamburger>
           </button>
+          <button
+            className="button delete-block inline-button"
+            onClick={handleDeleteBlock}
+          >Delete</button>
           <Editor
             blockTitle={this.state.title}
             blockContent={this.state.content}

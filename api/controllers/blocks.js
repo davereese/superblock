@@ -64,4 +64,24 @@ router.put(`${endpoint}/:blockId`, async (req, res) => {
   }
 });
 
+// delete
+router.delete(`${endpoint}/:blockId`, async (req, res) => {
+  const blockId = parseInt(req.params.blockId);
+  const username = req.user.username;
+
+  try {
+    // check to make sure current user has this id assigned to them
+    const userHasBlock = await users.hasBlock(username, blockId);
+
+    if (userHasBlock) {
+      await blocks.delete(blockId);
+      res.status(202).send();
+    } else {
+      throw `That block does not belong to ${username}`;
+    }
+  } catch (error) {
+    res.status(401).send(error);
+  }
+});
+
 module.exports = router;

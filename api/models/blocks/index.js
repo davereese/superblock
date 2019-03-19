@@ -77,10 +77,19 @@ const update = async (blockId, requestBody) => {
   }
 };
 
+const deleteBlock = async (blockId) => {
+  try {
+    return await knex(name).where({id: blockId}).del();
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   name: name,
   createTable: createTable,
   create: create,
   get: get,
   update: update,
+  delete: deleteBlock,
 }
