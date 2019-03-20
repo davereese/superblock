@@ -34,6 +34,7 @@ body {
   }
 
   .sidebar {
+    position: relative;
     grid-area: sidebar;
 
     @include for-tablet-landscape-up () {

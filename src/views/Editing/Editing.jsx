@@ -216,10 +216,7 @@ class Editing extends React.Component {
                   <ul className="tagsList">
                     {this.state.tags.map((tag, index) => {
                       return (
-                        <li
-                          className="tagsList__tag"
-                          key={index}
-                        >
+                        <li className="tagsList__tag" key={index}>
                           {tag}
                           <button
                             className="no-button close-button"
@@ -237,11 +234,20 @@ class Editing extends React.Component {
 
           <button
             type="button"
-            className="full-width"
+            className="full-width sidebar-save-block"
             onClick={handleSaveBlock}
             disabled={!this.state.unsaved}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
 
+          {!this.state.isNew ?
+            <div className="delete-block">
+              <button
+                className="delete-block__button full-width"
+                onClick={handleDeleteBlock}
+              >Delete</button>
+            </div>
+            : null
+          }
         </div>
         <div
           className={`content ${this.state.isOpen}`}
@@ -253,13 +259,6 @@ class Editing extends React.Component {
             onClick={handleSidebarToggle}
           ><Hamburger open={this.state.isOpen ? true : false}></Hamburger>
           </button>
-          {!this.state.isNew ?
-            <button
-              className="delete-block inline-button"
-              onClick={handleDeleteBlock}
-            >Delete</button>
-            : null
-          }
           <button
             type="button"
             className="inline-button save-block"

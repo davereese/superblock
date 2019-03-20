@@ -10,8 +10,7 @@
   }
 }
 
-.save-block,
-.delete-block {
+.save-block {
   position: absolute;
   bottom: 37px;
   right: 55px;
@@ -25,16 +24,26 @@
 }
 
 .delete-block {
-  left: 12px;
-  opacity: 0.4;
-  color: $placeholder-color;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
 
-  &:hover,
-  &:focus {
-    opacity: 1;
-    background-color: $button-hover;
-    border-color: $button-hover;
+  &__button {
+    color: rgba($text-error, 0.9);
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+      background-color: darken($text-error, 50%);
+      border-color: darken($text-error, 50%);
+      color: $text-error;
+    }
   }
+}
+
+.sidebar-save-block {
+  margin-top: 8px;
 }
 
 .tagsList {

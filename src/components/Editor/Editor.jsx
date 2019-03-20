@@ -34,7 +34,9 @@ class Editor extends React.Component {
     }
     
     if (prevProps.blockContent !== this.props.blockContent) {
-      this.setState({textarea: this.props.blockContent});
+      this.setState({textarea: this.props.blockContent}, () => {
+        this.updateLayout()
+      });
     }
 
     if (prevProps.language !== this.props.language) {
@@ -42,6 +44,14 @@ class Editor extends React.Component {
         Prism.highlightAll()
       });
     }
+  }
+
+  updateLayout() {
+    const newHeight = this.textareaRef.current.nextSibling.clientHeight;
+    const parentHeight = this.textareaRef.current.parentNode.clientHeight;
+    this.setState(
+      {height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1}
+    );
   }
 
   render() {
@@ -54,12 +64,8 @@ class Editor extends React.Component {
 
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
-        const newHeight = this.textareaRef.current.nextSibling.clientHeight;
-        const parentHeight = this.textareaRef.current.parentNode.clientHeight;
-        this.setState(
-          {height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1},
-          updateContent()
-        );
+        this.updateLayout();
+        updateContent();
         Prism.highlightAll();
       });
       // set focus
