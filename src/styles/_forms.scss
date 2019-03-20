@@ -44,6 +44,10 @@ button {
     border: 1px solid $text-error;
     color: $input-text;
   }
+
+  &[disabled] {
+    color: $placeholder-color;
+  }
 }
 
 select {
@@ -74,6 +78,17 @@ button {
   &:hover {
     background-color: darken($highlight-color, 43%);
     border-color: darken($highlight-color, 43%);
+  }
+
+  &[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: $button-hover;
+      border-color: $button-hover;
+      opacity: 0.6;
+    }
   }
 
   &.full-width {

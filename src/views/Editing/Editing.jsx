@@ -15,6 +15,7 @@ class Editing extends React.Component {
       tags: [],
       isNew: true,
       customTitle: false,
+      unsaved: false,
     }
 
     this.tagInputRef = React.createRef();
@@ -64,9 +65,10 @@ class Editing extends React.Component {
         headers: {
           'authorization': this.props.user.token
         }
+      }).then(() => {
+        this.setState({unsaved: false});
+        this.props.history.push(`/block/${block.data.id}`);
       });
-
-      this.props.history.push(`/block/${block.data.id}`);
     } catch (error) {
       console.error(error);
     }
@@ -83,6 +85,8 @@ class Editing extends React.Component {
         headers: {
           'authorization': this.props.user.token
         }
+      }).then(() => {
+        this.setState({unsaved: false});
       });
     } catch (error) {
       console.error(error);
@@ -113,7 +117,10 @@ class Editing extends React.Component {
 
   render() {
     const handleLanguageChange = (e) => {
-      this.setState({language: e.target.value});
+      this.setState({
+        language: e.target.value,
+        unsaved: true,
+      });
 
       if (!this.state.customTitle) {
         this.setState({title: `${e.target.value} Block`});
@@ -131,7 +138,8 @@ class Editing extends React.Component {
 
       this.setState({
         title: update.title,
-        content: update.content
+        content: update.content,
+        unsaved: true,
       });
     }
 
@@ -139,14 +147,20 @@ class Editing extends React.Component {
       const tags = this.state.tags;
       if (this.tagInputRef.current.value) {
         tags.push(this.tagInputRef.current.value);
-        this.setState({tags: tags});
+        this.setState({
+          tags: tags,
+          unsaved: true,
+        });
       }
     }
 
     const handleDeleteTag = (index) => {
       const tags = this.state.tags;
       tags.splice(index, 1);
-      this.setState({tags: tags});
+      this.setState({
+        tags: tags,
+        unsaved: true,
+      });
     }
 
     const handleSaveBlock = (e) => {
@@ -159,6 +173,12 @@ class Editing extends React.Component {
 
     const handleDeleteBlock = () => {
       this.deleteBlock();
+    }
+
+    /** DYNAMIC STYLES **/
+    const displaySave = {
+      opacity: `${this.state.unsaved ? 1 : 0}`,
+      right: `${this.state.language.length > 0 ? '55px' : '13px'}`,
     }
 
     return (
@@ -219,6 +239,7 @@ class Editing extends React.Component {
             type="button"
             className="full-width"
             onClick={handleSaveBlock}
+            disabled={!this.state.unsaved}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
 
         </div>
@@ -234,11 +255,17 @@ class Editing extends React.Component {
           </button>
           {!this.state.isNew ?
             <button
-              className="button delete-block inline-button"
+              className="delete-block inline-button"
               onClick={handleDeleteBlock}
             >Delete</button>
             : null
           }
+          <button
+            type="button"
+            className="inline-button save-block"
+            style={displaySave}
+            onClick={handleSaveBlock}
+          >{ this.state.isNew ? 'Save' : 'Update' }</button>
           <Editor
             blockTitle={this.state.title}
             blockContent={this.state.content}
