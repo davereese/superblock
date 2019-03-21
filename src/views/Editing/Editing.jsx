@@ -26,9 +26,18 @@ class Editing extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const isOpen = localStorage.getItem('isOpen');
+    if (isOpen === 'true') {
+      this.setState({isOpen: true});
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.id !== this.props.match.params.id && this.props.match.params.id) {
       this.queryBlock(this.props.match.params.id);
+    } else if (prevProps.match.params.id && !this.props.match.params.id) {
+      this.resetBlock();
     }
   }
 
@@ -57,7 +66,7 @@ class Editing extends React.Component {
 
   async saveBlock() {
     try {
-      const block = await axios.post(`http://localhost:4000/api/blocks/`, {
+      await axios.post(`http://localhost:4000/api/blocks/`, {
         content: this.state.content,
         title: this.state.title,
         language: this.state.language,
@@ -66,9 +75,9 @@ class Editing extends React.Component {
         headers: {
           'authorization': this.props.user.token
         }
-      }).then(() => {
+      }).then((result) => {
         this.setState({unsaved: false});
-        this.props.history.push(`/block/${block.data.id}`);
+        this.props.history.push(`/block/${result.data.id}`);
       });
     } catch (error) {
       console.error(error);
@@ -102,19 +111,23 @@ class Editing extends React.Component {
         }
       });
 
-      this.setState({
-        content: '',
-        title: 'Block',
-        language: '',
-        tags: [],
-        isNew: true,
-        customTitle: false,
-        unsaved: false,
-      });
+      this.resetBlock()
       this.props.history.push('/');
     } catch (error) {
       console.error(error);
     }
+  }
+
+  resetBlock() {
+    this.setState({
+      content: '',
+      title: 'Block',
+      language: '',
+      tags: [],
+      isNew: true,
+      customTitle: false,
+      unsaved: false,
+    });
   }
 
   render() {
@@ -130,7 +143,9 @@ class Editing extends React.Component {
     }
 
     const handleSidebarToggle = (e) => {
-      this.setState({isOpen: !this.state.isOpen});
+      this.setState({isOpen: !this.state.isOpen}, () => {
+        localStorage.setItem('isOpen', this.state.isOpen);
+      });
     }
 
     const handleUpdate = (update) => {
