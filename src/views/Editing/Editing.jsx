@@ -140,7 +140,7 @@ class Editing extends React.Component {
       this.setState({
         title: update.title,
         content: update.content,
-        unsaved: true,
+        unsaved: update.content.length > 0 ? true : false,
       });
     }
 

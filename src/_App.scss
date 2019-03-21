@@ -57,6 +57,10 @@ body {
       transform: none;
       opacity: 1;
     }
+
+    &.false {
+      pointer-events: none;
+    }
   }
 
   .content {
