@@ -75,6 +75,8 @@ router.delete(`${endpoint}/:blockId`, async (req, res) => {
 
     if (userHasBlock) {
       await blocks.delete(blockId);
+      // remove block's ID from user
+      await users.removeBlock(req.user.username, blockId);
       res.status(202).send();
     } else {
       throw `That block does not belong to ${username}`;

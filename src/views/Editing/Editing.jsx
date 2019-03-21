@@ -51,6 +51,7 @@ class Editing extends React.Component {
     } catch (error) {
       // handle error
       console.error(error);
+      this.props.history.push('/');
     }
   }
 
