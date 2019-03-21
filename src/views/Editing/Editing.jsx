@@ -10,12 +10,12 @@ class Editing extends React.Component {
     this.state = {
       content: '',
       language: '',
-      isOpen: '',
       title: 'Block',
       tags: [],
       isNew: true,
       customTitle: false,
       unsaved: false,
+      isOpen: '',
     }
 
     this.tagInputRef = React.createRef();
@@ -108,6 +108,7 @@ class Editing extends React.Component {
         tags: [],
         isNew: true,
         customTitle: false,
+        unsaved: false,
       });
       this.props.history.push('/');
     } catch (error) {
