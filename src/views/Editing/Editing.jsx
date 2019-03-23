@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import Editor from '../../components/Editor/Editor'
 import Hamburger from '../../components/Hamburger/Hamburger';
+import Modal from '../../components/Modal/Modal';
 
 class Editing extends React.Component {
   constructor(props) {
@@ -16,20 +17,22 @@ class Editing extends React.Component {
       customTitle: false,
       unsaved: false,
       isOpen: '',
-    }
+      modalOpen: null,
+    };
 
     this.tagInputRef = React.createRef();
-
-    // query the block
-    if (props.match.params.id) {
-      this.queryBlock(props.match.params.id);
-    }
+    this.authHeaders = {'authorization': props.user.token};
   }
 
   componentDidMount() {
     const isOpen = localStorage.getItem('isOpen');
     if (isOpen === 'true') {
       this.setState({isOpen: true});
+    }
+
+    // query the block
+    if (this.props.match.params.id) {
+      this.queryBlock(this.props.match.params.id);
     }
   }
 
@@ -44,9 +47,7 @@ class Editing extends React.Component {
   async queryBlock(blockId) {
     try {
       const response = await axios.get(`http://localhost:4000/api/blocks/${blockId}`, {
-        headers: {
-          'authorization': this.props.user.token
-        },
+        headers: this.authHeaders,
       });
       const data = response.data[0];
       this.setState({
@@ -72,9 +73,7 @@ class Editing extends React.Component {
         language: this.state.language,
         tags: this.state.tags,
       },{
-        headers: {
-          'authorization': this.props.user.token
-        }
+        headers: this.authHeaders
       }).then((result) => {
         this.setState({unsaved: false});
         this.props.history.push(`/block/${result.data.id}`);
@@ -92,9 +91,7 @@ class Editing extends React.Component {
         language: this.state.language,
         tags: this.state.tags,
       },{
-        headers: {
-          'authorization': this.props.user.token
-        }
+        headers: this.authHeaders
       }).then(() => {
         this.setState({unsaved: false});
       });
@@ -106,9 +103,7 @@ class Editing extends React.Component {
   async deleteBlock() {
     try {
       await axios.delete(`http://localhost:4000/api/blocks/${this.props.match.params.id}`, {
-        headers: {
-          'authorization': this.props.user.token
-        }
+        headers: this.authHeaders
       });
 
       this.resetBlock()
@@ -189,7 +184,12 @@ class Editing extends React.Component {
     }
 
     const handleDeleteBlock = () => {
-      this.deleteBlock();
+      toggleModal();
+    }
+
+    const toggleModal = (action) => {
+      if (action) { action(); }
+      this.setState({modalOpen: !this.state.modalOpen});
     }
 
     /** DYNAMIC STYLES **/
@@ -289,6 +289,20 @@ class Editing extends React.Component {
             onUpdate={handleUpdate}
           />
         </div>
+        <Modal open={this.state.modalOpen} close={toggleModal}>
+          <h2 className="header-lg">Are you sure?</h2>
+          <p className="modal-content">This will permanently delete <strong>{this.state.title}</strong>.</p>
+          <div className="fifty-fifty">
+            <button
+              className="delete-block__button full-width"
+              onClick={(e) => {toggleModal(this.deleteBlock.bind(this))}}
+            >Yes, Delete</button>
+            <button
+              className="button full-width"
+              onClick={(e) => {toggleModal()}}
+            >Cancel</button>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

@@ -56,16 +56,6 @@ select {
   background-position: calc(100% - 17px);
 }
 
-.input-and-button {
-  display: grid;
-  grid-template-columns: calc(100% - 64px) 44px;
-  grid-column-gap: 20px;
-
-  button {
-    width: inherit;
-  }
-}
-
 button {
   cursor: pointer;
   width: 80%;
@@ -130,4 +120,21 @@ button {
       padding: 0 5px;
     }
   }
+}
+
+// Quick form layouts
+.input-and-button {
+  display: grid;
+  grid-template-columns: calc(100% - 64px) 44px;
+  grid-column-gap: 20px;
+
+  button {
+    width: inherit;
+  }
+}
+
+.fifty-fifty {
+  display: grid;
+  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  grid-column-gap: 20px;
 }

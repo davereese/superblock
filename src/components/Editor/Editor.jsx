@@ -24,7 +24,7 @@ class Editor extends React.Component {
       metaDown: false,
       shiftDown: false,
       editingTitle: false,
-    }
+    };
     this.textareaRef = React.createRef();
   }
 
