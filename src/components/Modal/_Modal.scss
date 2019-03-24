@@ -15,6 +15,7 @@
   border-radius: 4px;
   box-shadow: 0 2px 34px $shadow;
   pointer-events: none;
+  outline: none;
   transition: opacity 0.3s;
 
   &.true,
@@ -33,6 +34,7 @@
 
   .modal-content {
     margin: 5px 0 25px;
+    color: $placeholder-color;
   }
 }
 

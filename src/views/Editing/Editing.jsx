@@ -21,7 +21,7 @@ class Editing extends React.Component {
     };
 
     this.tagInputRef = React.createRef();
-    this.authHeaders = {'authorization': props.user.token};
+    this.authHeaders = {'authorization': this.props.user.token};
   }
 
   componentDidMount() {
@@ -259,7 +259,7 @@ class Editing extends React.Component {
           {!this.state.isNew ?
             <div className="delete-block">
               <button
-                className="delete-block__button full-width"
+                className="warning full-width"
                 onClick={handleDeleteBlock}
               >Delete</button>
             </div>
@@ -294,12 +294,12 @@ class Editing extends React.Component {
           <p className="modal-content">This will permanently delete <strong>{this.state.title}</strong>.</p>
           <div className="fifty-fifty">
             <button
-              className="delete-block__button full-width"
-              onClick={(e) => {toggleModal(this.deleteBlock.bind(this))}}
+              className="full-width light-primary"
+              onClick={(e) => { toggleModal(this.deleteBlock.bind(this))} }
             >Yes, Delete</button>
             <button
-              className="button full-width"
-              onClick={(e) => {toggleModal()}}
+              className="full-width light-secondary"
+              onClick={(e) => { toggleModal()} }
             >Cancel</button>
           </div>
         </Modal>

@@ -81,6 +81,43 @@ button {
     }
   }
 
+  &.warning {
+    color: rgba($text-error, 0.9);
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+      background-color: darken($text-error, 48.5%);
+      border-color: darken($text-error, 48.5%);
+      color: $text-error;
+    }
+  }
+
+  &.light-primary {
+    background-color: $highlight-color;
+    border-color: $highlight-color;
+    color: $text-dark;
+
+    &:hover,
+    &:focus {
+      background-color: darken($highlight-color, 8%);
+      border-color: darken($highlight-color, 8%);
+    }
+  }
+
+  &.light-secondary {
+    background-color: lighten($secondary-button, 15%);
+    border-color: lighten($secondary-button, 15%);
+    color: $text-dark;
+
+    &:hover,
+    &:focus {
+      background-color: lighten($secondary-button, 5%);
+      border-color: lighten($secondary-button, 5%);
+    }
+  }
+
   &.full-width {
     width: 100%;
   }
