@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import Editor from '../../components/Editor/Editor'
@@ -21,7 +22,7 @@ class Editing extends React.Component {
     };
 
     this.tagInputRef = React.createRef();
-    this.authHeaders = {'authorization': this.props.user.token};
+    this.authHeaders = {'authorization': this.props.user ? this.props.user.token : null};
   }
 
   componentDidMount() {
@@ -307,5 +308,9 @@ class Editing extends React.Component {
     );
   }
 }
+
+Modal.propTypes = {
+  user: PropTypes.object,
+};
 
 export default Editing;
