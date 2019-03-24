@@ -42,6 +42,9 @@ class Editing extends React.Component {
       this.queryBlock(this.props.match.params.id);
     } else if (prevProps.match.params.id && !this.props.match.params.id) {
       this.resetBlock();
+    } else if (prevProps.user !== null && this.props.user === null) {
+      this.resetBlock();
+      this.props.history.push('/');
     }
   }
 
