@@ -53,7 +53,7 @@ export const updateBlock = async function(blockId, state) {
 export const deleteBlock = async function(blockId) {
   try {
     await axios.delete(`http://localhost:4000/api/blocks/${blockId}`, {
-      headers: this.authHeaders
+      headers: authHeaders
     });
   } catch (error) {
     console.error(error);

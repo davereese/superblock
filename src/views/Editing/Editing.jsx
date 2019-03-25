@@ -48,7 +48,7 @@ class Editing extends React.Component {
 
   async queryBlock(blockId) {
     Block.queryBlock(blockId).then((res) => {
-      if (!res.error) {
+      if (res && !res.error) {
         this.setState({
           content: res.content,
           title: res.title,
@@ -188,7 +188,7 @@ class Editing extends React.Component {
           <button
             type="button"
             className="full-width sidebar-save-block"
-            onClick={this.handleSaveBlock}
+            onClick={this.handleSaveBlock.bind(this)}
             disabled={!this.state.unsaved}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
 
@@ -216,7 +216,7 @@ class Editing extends React.Component {
             type="button"
             className="inline-button save-block"
             style={displaySave}
-            onClick={this.handleSaveBlock}
+            onClick={this.handleSaveBlock.bind(this)}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
           <Editor
             blockTitle={this.state.title}
