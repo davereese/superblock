@@ -36,6 +36,7 @@ body {
   .sidebar {
     position: relative;
     grid-area: sidebar;
+    pointer-events: none;
 
     @include for-tablet-landscape-up () {
       opacity: 0;
@@ -56,10 +57,7 @@ body {
     &.true {
       transform: none;
       opacity: 1;
-    }
-
-    &.false {
-      pointer-events: none;
+      pointer-events: auto;
     }
   }
 

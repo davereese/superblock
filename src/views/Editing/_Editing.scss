@@ -3,6 +3,7 @@
   float: left;
   width: 19px;
   height: 19px;
+  transform: translateY(4px);
   z-index: 5;
 
   @include for-tablet-landscape-up () {
