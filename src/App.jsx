@@ -7,12 +7,12 @@ import Login from './views/Login/Login';
 
 const date = new Date();
 
+// Check for logged in user
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
 class App extends Component {
   constructor(props) {
     super(props);
-
-    // Check for logged in user
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     this.state = {
       currentUser: currentUser,
