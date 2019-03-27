@@ -32,5 +32,11 @@ header {
       line-height: 1.1;
       color: $text-light;
     }
+
+    &__badge {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
   }
 }

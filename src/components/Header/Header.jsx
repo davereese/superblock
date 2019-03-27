@@ -4,13 +4,18 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 
 import logo from '../../resources/images/logo.svg';
+import UserBadge from '../UserBadge/UserBadge';
 
-
+/*
+  This component displays the site header.
+ */
 function Header({
   user,
   onLogout,
   location
 }) {
+  const [badgeClicked, setbadgeClicked] = React.useState(0);
+
   const handleLogout = (e) => {
     e.preventDefault();
     onLogout();
@@ -25,13 +30,23 @@ function Header({
         {
           user !== null ?
             <span className="user__details">
-              {user.username}<br />
-              <button
-                type="button"
-                className="no-button inline-button"
-                onClick={handleLogout}
-              >Log Out</button>
-            </span> : null
+              <div className="user__badge">
+                <UserBadge
+                  user={user}
+                  clickEvent={() => setbadgeClicked(!badgeClicked)}
+                ></UserBadge>
+              </div>
+            </span>
+          : null
+        }
+        {
+          badgeClicked === true ?
+          <button
+            type="button"
+            className="no-button inline-button"
+            onClick={handleLogout}
+          >Log Out</button>
+          : null
         }
         {
           location.pathname !== '/login' && user === null ?
