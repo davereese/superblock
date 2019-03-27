@@ -217,7 +217,7 @@ class Editing extends React.Component {
             <option value=''>Choose a Language</option>
             <option value='js'>JavaScript</option>
             <option value='css'>CSS</option>
-            <option value='sass'>SASS</option>
+            <option value='scss'>SASS</option>
             <option value='html'>HTML</option>
           </select>
 

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import * as editor from './editorFunctions.js';
 
 import Prism from 'prismjs';
-import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
 
 import LineNumbers from './LineNumbers';
