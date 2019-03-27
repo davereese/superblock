@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
+import * as Block from './block-requests';
 import Editor from '../../components/Editor/Editor'
 import Hamburger from '../../components/Hamburger/Hamburger';
+import TagForm from './TagForm';
 import Modal from '../../components/Modal/Modal';
 
 class Editing extends React.Component {
@@ -20,9 +21,6 @@ class Editing extends React.Component {
       isOpen: '',
       modalOpen: null,
     };
-
-    this.tagInputRef = React.createRef();
-    this.authHeaders = {'authorization': this.props.user ? this.props.user.token : null};
   }
 
   componentDidMount() {
@@ -49,72 +47,53 @@ class Editing extends React.Component {
   }
 
   async queryBlock(blockId) {
-    try {
-      const response = await axios.get(`http://localhost:4000/api/blocks/${blockId}`, {
-        headers: this.authHeaders,
-      });
-      const data = response.data[0];
-      this.setState({
-        content: data.content,
-        title: data.title,
-        language: data.language,
-        tags: data.tags,
-        isNew: false,
-        customTitle: true,
-      });
-    } catch (error) {
-      // handle error
-      console.error(error);
-      this.props.history.push('/');
-    }
+    Block.queryBlock(blockId).then((res) => {
+      if (res && !res.error) {
+        this.setState({
+          content: res.content,
+          title: res.title,
+          language: res.language,
+          tags: res.tags,
+          isNew: false,
+          customTitle: true,
+        });
+      } else {
+        // handle error
+        this.props.history.push('/');
+      }
+    });
   }
 
-  async saveBlock() {
-    try {
-      await axios.post(`http://localhost:4000/api/blocks/`, {
-        content: this.state.content,
-        title: this.state.title,
-        language: this.state.language,
-        tags: this.state.tags,
-      },{
-        headers: this.authHeaders
-      }).then((result) => {
-        this.setState({unsaved: false});
-        this.props.history.push(`/block/${result.data.id}`);
+  async handleSaveBlock(e) {
+    if (this.state.isNew) {
+      Block.saveBlock(this.state).then((res) => {
+        if (!res.error) {
+          this.setState({unsaved: false});
+          this.props.history.push(`/block/${res.id}`);
+        } else {
+          // handle error
+        }
       });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async updateBlock() {
-    try {
-      await axios.put(`http://localhost:4000/api/blocks/${this.props.match.params.id}`, {
-        content: this.state.content,
-        title: this.state.title,
-        language: this.state.language,
-        tags: this.state.tags,
-      },{
-        headers: this.authHeaders
-      }).then(() => {
-        this.setState({unsaved: false});
+    } else {
+      Block.updateBlock(this.props.match.params.id, this.state).then((res) => {
+        if (!res) {
+          this.setState({unsaved: false});
+        } else {
+          // handle error
+        }
       });
-    } catch (error) {
-      console.error(error);
     }
   }
 
   async deleteBlock() {
-    try {
-      await axios.delete(`http://localhost:4000/api/blocks/${this.props.match.params.id}`, {
-        headers: this.authHeaders
-      });
-
-      this.resetBlock()
-      this.props.history.push('/');
-    } catch (error) {
-      console.error(error);
-    }
+    Block.deleteBlock(this.props.match.params.id).then((res) => {
+      if (!res) {
+        this.resetBlock()
+        this.props.history.push('/');
+      } else {
+        // handle error
+      }
+    });
   }
 
   resetBlock() {
@@ -159,32 +138,11 @@ class Editing extends React.Component {
       });
     }
 
-    const handleAddTag = (e) => {
-      const tags = this.state.tags;
-      if (this.tagInputRef.current.value) {
-        tags.push(this.tagInputRef.current.value);
-        this.setState({
-          tags: tags,
-          unsaved: true,
-        });
-      }
-    }
-
-    const handleDeleteTag = (index) => {
-      const tags = this.state.tags;
-      tags.splice(index, 1);
+    const handleAlterTags = (tagsArray) => {
       this.setState({
-        tags: tags,
+        tags: tagsArray,
         unsaved: true,
       });
-    }
-
-    const handleSaveBlock = (e) => {
-      if (this.state.isNew) {
-        this.saveBlock();
-      } else {
-        this.updateBlock();
-      }
     }
 
     const handleDeleteBlock = () => {
@@ -223,40 +181,14 @@ class Editing extends React.Component {
 
           {
             this.props.user !== null ?
-              <>
-                <label htmlFor="newtag">Tag</label><br />
-                <div className="input-and-button">
-                  <input
-                    type="text"
-                    id="newtag"
-                    ref={this.tagInputRef}
-                  />
-                  <button type="button" onClick={handleAddTag}>+</button>
-                </div>
-                {this.state.tags.length > 0 ?
-                  <ul className="tagsList">
-                    {this.state.tags.map((tag, index) => {
-                      return (
-                        <li className="tagsList__tag" key={index}>
-                          {tag}
-                          <button
-                            className="no-button close-button"
-                            onClick={(e) => {handleDeleteTag(index)}}
-                          ></button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  : null
-                }
-              </>
+            <TagForm tags={this.state.tags} alterTags={handleAlterTags}></TagForm>
             : null
           }
 
           <button
             type="button"
             className="full-width sidebar-save-block"
-            onClick={handleSaveBlock}
+            onClick={this.handleSaveBlock.bind(this)}
             disabled={!this.state.unsaved}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
 
@@ -284,7 +216,7 @@ class Editing extends React.Component {
             type="button"
             className="inline-button save-block"
             style={displaySave}
-            onClick={handleSaveBlock}
+            onClick={this.handleSaveBlock.bind(this)}
           >{ this.state.isNew ? 'Save' : 'Update' }</button>
           <Editor
             blockTitle={this.state.title}
@@ -295,7 +227,9 @@ class Editing extends React.Component {
         </div>
         <Modal open={this.state.modalOpen} close={toggleModal}>
           <h2 className="header-lg">Are you sure?</h2>
-          <p className="modal-content">This will permanently delete <strong>{this.state.title}</strong>.</p>
+          <p className="modal-content">
+            This will permanently delete <strong>{this.state.title}</strong>.
+          </p>
           <div className="fifty-fifty">
             <button
               className="full-width light-primary"

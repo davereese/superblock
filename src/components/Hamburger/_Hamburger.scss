@@ -1,7 +1,5 @@
 .hamburger {
   display: block;
-  position: absolute;
-  top: 6px;
   margin: 0;
   padding: 0;
   width: 19px;
@@ -10,7 +8,7 @@
   border: none;
   border-top: 1px solid $highlight-color;
   background-color: transparent;
-  transition: border 0.2s, top 0.2s;
+  transition: border 0.2s, top 0.2s, border-color 0.3s;
 
   &::before,
   &::after {
@@ -85,14 +83,14 @@
     left: -8px;
   }
   100% {
-    transform: rotate(225deg) translate(15px, -11px);
+    transform: rotate(225deg) translate(14px, -12px);
     left: 0;
   }
 }
 
 @keyframes flipUpCollapse {
   0% {
-    transform: rotate(225deg) translate(15px, -11px);
+    transform: rotate(225deg) translate(14px, -12px);
     left: 0px;
   }
   25% {
@@ -113,14 +111,14 @@
     left: -20px;
   }
   100% {
-    transform: rotate(-225deg) translate(12px, 14px);
+    transform: rotate(-225deg) translate(13px, 13px);
     left: 0px;
   }
 }
 
 @keyframes flipDownCollapse {
   0% {
-    transform: rotate(-225deg) translate(12px, 14px);
+    transform: rotate(-225deg) translate(13px, 13px);
     left: 0px;
   }
   25% {

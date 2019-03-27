@@ -3,6 +3,7 @@
   float: left;
   width: 19px;
   height: 19px;
+  transform: translateY(4px);
   z-index: 5;
 
   @include for-tablet-landscape-up () {
@@ -41,22 +42,4 @@
 
 .sidebar-save-block {
   margin-top: 8px;
-}
-
-.tagsList {
-  margin: 0 0 17px;
-  padding: 0;
-  list-style-type: none;
-
-  &__tag {
-    display: inline;
-    margin: 0 8px 8px 0;
-    padding: 3px 5px 3px 10px;
-    border-radius: 4px;
-    background-color: $button-hover;
-    color: $tag-text;
-    font-size: px-to-rem(11px);
-    white-space: nowrap;
-    float: left;
-  }
 }
