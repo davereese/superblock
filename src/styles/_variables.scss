@@ -25,6 +25,8 @@ $highlight-color:         $minty;
 $editor-bg:               $hurricane;
 $line-number-bg:          $stormy;
 $scrollbar-color:         $black;
+$popup-backround:         $white;
+$shadow:                  $black;
 // -text
 $link-color:              $minty;
 $placeholder-color:       $overcast;
@@ -32,6 +34,7 @@ $label-color:             $minty;
 $text-dark:               $black;
 $text-light:              $white;
 $text-error:              $brick;
+$tag-text:                $overcast;
 // -assets
 $js-yellow:               $canary;
 $sass-pink:               $rosey;
@@ -50,6 +53,7 @@ $comment:                 $overcast;
 $input-bg:                $hurricane;
 $input-text:              $white;
 $button-hover:            $black;
+$secondary-button:        $overcast;
 
 // IMAGE PATH
 $image-path:              './resources/images/';

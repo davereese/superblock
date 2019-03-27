@@ -24,6 +24,7 @@ router.post(endpoint, async (req, res) => {
   }
 });
 
+// get single block
 router.get(`${endpoint}/:blockId`, async (req, res) => {
   const blockId = parseInt(req.params.blockId);
   const username = req.user.username;
@@ -35,6 +36,48 @@ router.get(`${endpoint}/:blockId`, async (req, res) => {
     if (userHasBlock) {
       const block = await blocks.get(blockId);
       res.status(200).json(block);
+    } else {
+      throw `That block does not belong to ${username}`;
+    }
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
+// update
+router.put(`${endpoint}/:blockId`, async (req, res) => {
+  const blockId = parseInt(req.params.blockId);
+  const username = req.user.username;
+
+  try {
+    // check to make sure current user has this id assigned to them
+    const userHasBlock = await users.hasBlock(username, blockId);
+
+    if (userHasBlock) {
+      const block = await blocks.update(blockId, req.body);
+      res.status(200).json(block);
+    } else {
+      throw `That block does not belong to ${username}`;
+    }
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
+// delete
+router.delete(`${endpoint}/:blockId`, async (req, res) => {
+  const blockId = parseInt(req.params.blockId);
+  const username = req.user.username;
+
+  try {
+    // check to make sure current user has this id assigned to them
+    const userHasBlock = await users.hasBlock(username, blockId);
+
+    if (userHasBlock) {
+      await blocks.delete(blockId);
+      // remove block's ID from user
+      await users.removeBlock(req.user.username, blockId);
+      res.status(202).send();
     } else {
       throw `That block does not belong to ${username}`;
     }

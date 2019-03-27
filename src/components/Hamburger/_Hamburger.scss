@@ -9,6 +9,7 @@
   border-radius: 0;
   border: none;
   border-top: 1px solid $highlight-color;
+  background-color: transparent;
   transition: border 0.2s, top 0.2s;
 
   &::before,

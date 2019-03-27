@@ -94,20 +94,29 @@ const create = async (request) => {
 };
 
 const update = async (userId, requestBody) => {
-  let payload = {};
-  
-  // copy valid user fields from request body
-  Object.keys(requestBody).forEach(key => {
-    if (columns.includes(key)) {
-      payload[key] = requestBody[key];
-    }
-  });
+  let payload = {
+    username: requestBody.username,
+    password: requestBody.password,
+    email: requestBody.email,
+  };
   
   // update user in db
   try {
     return await knex(name).where({id: userId}).update(payload);
   } catch (error) {
     throw error;
+  }
+};
+
+const hasBlock = async (username, blockId) => {
+  try {
+    const user = await knex(name)
+      .first('blocks')
+      .where({username: username});
+    
+    return user.blocks.includes(blockId);
+  } catch (error) {
+    return error;
   }
 };
 
@@ -130,16 +139,21 @@ const addBlock = async (username, blockId) => {
   }
 };
 
-const hasBlock = async (username, blockId) => {
+const removeBlock = async (username, blockId) => {
   try {
-    const blocks = await knex(name)
+    const usersBlocks = await knex(name)
       .where({username: username})
       .first('blocks')
       .then((row) => {
-        return row.blocks;
+        return row.blocks !== null ? row.blocks : [];
       });
-    
-    return blocks.includes(blockId);
+
+    const index = usersBlocks.indexOf(blockId);
+    usersBlocks.splice(index, 1);
+
+    await knex(name)
+      .where({username: username})
+      .update({blocks: usersBlocks});
   } catch (error) {
     return error;
   }
@@ -165,5 +179,6 @@ module.exports = {
   remove: remove,
   addBlock: addBlock,
   hasBlock: hasBlock,
+  removeBlock: removeBlock,
   authenticate: authenticate,
 };

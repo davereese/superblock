@@ -14,8 +14,8 @@
   &__label {
     position: relative;
     display: block;
+    margin: 0;
     text-align: center;
-    margin: 0 -17px 0 0;
     min-height: 20px;
 
     h1 {
@@ -54,7 +54,7 @@
       width: 90%;
       color: $label-color;
       text-align: center;
-      margin-right: 26px;
+      margin-right: 18px;
     }
   }
 
@@ -139,7 +139,7 @@
   .block-image {
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    right: 13px;
     width: 28px;
     opacity: 0.6;
     font-size: px-to-rem(8px);

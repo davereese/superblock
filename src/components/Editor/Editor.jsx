@@ -24,43 +24,48 @@ class Editor extends React.Component {
       metaDown: false,
       shiftDown: false,
       editingTitle: false,
-      customTitle: false,
-    }
+    };
     this.textareaRef = React.createRef();
   }
 
-  componentDidMount() {
-    // Set customTitle if the title initializes as something other than 'Block'
-    this.customTitleCheck();
-  }
-
   componentDidUpdate(prevProps) {
-    if (prevProps.blockTitle !== this.props.blockTitle && !this.state.customTitle) {
+    if (prevProps.blockTitle !== this.props.blockTitle) {
       this.setState({title: this.props.blockTitle});
-      this.customTitleCheck();
     }
     
     if (prevProps.blockContent !== this.props.blockContent) {
-      this.setState({textarea: this.props.blockContent});
+      this.setState({textarea: this.props.blockContent}, () => {
+        this.updateLayout()
+      });
     }
 
     if (prevProps.language !== this.props.language) {
-      Prism.highlightAll();
+      this.setState({language: this.props.language}, () => {
+        Prism.highlightAll()
+      });
     }
   }
 
-  customTitleCheck() {
-    if (this.props.blockTitle !== 'Block') {
-      this.setState({customTitle: true});
-    }
+  updateLayout() {
+    const newHeight = this.textareaRef.current.nextSibling.clientHeight;
+    const parentHeight = this.textareaRef.current.parentNode.clientHeight;
+    this.setState(
+      {height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1}
+    );
   }
 
   render() {
+    const updateContent = () => {
+      this.props.onUpdate({
+        title: this.state.title,
+        content: this.state.textarea,
+      });
+    }
+
     const textareaChange = (e) => {
       this.setState({textarea: e.target.value}, () => {
-        const newHeight = this.textareaRef.current.nextSibling.clientHeight;
-        const parentHeight = this.textareaRef.current.parentNode.clientHeight;
-        this.setState({height: newHeight > parentHeight ? newHeight + 100 : parentHeight - 1});
+        this.updateLayout();
+        updateContent();
         Prism.highlightAll();
       });
       // set focus
@@ -164,12 +169,9 @@ class Editor extends React.Component {
     }
 
     const handleTitleChange = (e) => {
-      this.setState({title: e.target.value});
-
-      // Set the title as a custom one so we don't overwrite it if the language selection changes.
-      if (!this.state.customTitle) {
-        this.setState({customTitle: true});
-      }
+      this.setState({title: e.target.value}, () => {
+        updateContent()
+      });
     }
 
     const handleCopy = (e) => {
@@ -245,6 +247,7 @@ Editor.propTypes = {
   blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
+  onUpdate: PropTypes.func,
 };
 
 Editor.defaultProps = {

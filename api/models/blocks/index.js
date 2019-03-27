@@ -59,9 +59,36 @@ const get = async (blockId) => {
   }
 };
 
+const update = async (blockId, requestBody) => {
+  const payload = {
+    title: requestBody.title,
+    content: requestBody.content,
+    language: requestBody.language,
+    tags: requestBody.tags,
+    dateEdited: new Date(),
+  };
+  
+  // update user in db
+  try {
+    return await knex(name).where({id: blockId}).update(payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteBlock = async (blockId) => {
+  try {
+    return await knex(name).where({id: blockId}).del();
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   name: name,
   createTable: createTable,
   create: create,
-  get: get
+  get: get,
+  update: update,
+  delete: deleteBlock,
 }
