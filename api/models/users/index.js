@@ -94,14 +94,11 @@ const create = async (request) => {
 };
 
 const update = async (userId, requestBody) => {
-  let payload = {};
-  
-  // copy valid user fields from request body
-  Object.keys(requestBody).forEach(key => {
-    if (columns.includes(key)) {
-      payload[key] = requestBody[key];
-    }
-  });
+  let payload = {
+    username: requestBody.username,
+    password: requestBody.password,
+    email: requestBody.email,
+  };
   
   // update user in db
   try {
@@ -113,14 +110,11 @@ const update = async (userId, requestBody) => {
 
 const hasBlock = async (username, blockId) => {
   try {
-    const blocks = await knex(name)
-      .where({username: username})
+    const user = await knex(name)
       .first('blocks')
-      .then((row) => {
-        return row.blocks;
-      });
+      .where({username: username});
     
-    return blocks.includes(blockId);
+    return user.blocks.includes(blockId);
   } catch (error) {
     return error;
   }

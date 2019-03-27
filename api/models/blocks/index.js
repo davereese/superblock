@@ -60,14 +60,13 @@ const get = async (blockId) => {
 };
 
 const update = async (blockId, requestBody) => {
-  let payload = {};
-  
-  // copy valid user fields from request body
-  Object.keys(requestBody).forEach(key => {
-    if (columns.includes(key)) {
-      payload[key] = requestBody[key];
-    }
-  });
+  const payload = {
+    title: requestBody.title,
+    content: requestBody.content,
+    language: requestBody.language,
+    tags: requestBody.tags,
+    dateEdited: new Date(),
+  };
   
   // update user in db
   try {

@@ -39,7 +39,7 @@ router.put(`${endpoint}/:userId`, async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    await users.update(userId, req.body);
+    await users.update(userId, req);
     return res.status(202).send();
   } catch (error) {
     return res.status(400).json(error);

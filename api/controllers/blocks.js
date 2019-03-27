@@ -40,7 +40,7 @@ router.get(`${endpoint}/:blockId`, async (req, res) => {
       throw `That block does not belong to ${username}`;
     }
   } catch (error) {
-    res.status(401).send(error);
+    res.status(404).send(error);
   }
 });
 
@@ -60,7 +60,7 @@ router.put(`${endpoint}/:blockId`, async (req, res) => {
       throw `That block does not belong to ${username}`;
     }
   } catch (error) {
-    res.status(401).send(error);
+    res.status(404).send(error);
   }
 });
 
@@ -82,7 +82,7 @@ router.delete(`${endpoint}/:blockId`, async (req, res) => {
       throw `That block does not belong to ${username}`;
     }
   } catch (error) {
-    res.status(401).send(error);
+    res.status(404).send(error);
   }
 });
 
