@@ -8,6 +8,16 @@ body {
   background-color: $body-bg;
 }
 
+a {
+  color: $highlight-color;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
 .app {
   .main {
     position: relative;

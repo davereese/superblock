@@ -137,11 +137,19 @@ button {
 
   &.no-button {
     display: inline;
-    width: auto;
     background: transparent;
     margin: 0;
     padding: 0;
     border: 0;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  &.no-button-dark {
+    color: darken($highlight-color, 10%);
   }
 
   &.inline-button {

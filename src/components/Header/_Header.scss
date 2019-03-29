@@ -23,9 +23,7 @@ header {
     text-align: right;
 
     a {
-      color: $highlight-color;
       font-size: px-to-rem(14px);
-      text-decoration: none;
     }
 
     &__details {
@@ -37,6 +35,11 @@ header {
       width: 30px;
       height: 30px;
       cursor: pointer;
+    }
+
+    &__name {
+      margin: 0;
+      padding: 0;
     }
   }
 }
