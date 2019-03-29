@@ -229,7 +229,7 @@ class Editor extends React.Component {
             />
           </Scrollbar>
           <Block color={this.props.language}>
-            {this.props.language}
+            {this.props.language === 'scss' ? 'sass' : this.props.language}
           </Block>
           <div
             className="editor__copy"
