@@ -246,7 +246,7 @@ Editor.propTypes = {
   blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
-  onUpdate: PropTypes.func,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 Editor.defaultProps = {

@@ -10,7 +10,7 @@ function UserBadge({
   clickEvent
 }) {
   const handleClick = (e) => {
-    clickEvent();
+    clickEvent(e);
   }
 
   return (

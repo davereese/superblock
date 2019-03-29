@@ -1,0 +1,114 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 10px 15px;
+  min-width: 150px;
+  max-width: 600px;
+  height: auto;
+  min-height: 50px;
+  box-sizing: border-box;
+  background-color: $white;
+  border-radius: 4px;
+  box-shadow: 0 2px 34px $shadow;
+  outline: none;
+  z-index: 10;
+  text-align: left;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  &.true {
+    opacity: 1;
+  }
+
+  &.false {
+    opacity: 0;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: $white;
+    border-radius: 50%;
+  }
+
+  &.topleft::before {
+    top: -6px;
+  }
+
+  &.topright::before {
+    top: -6px;
+    right: 15px;
+  }
+
+  &.topcenter::before {
+    top: -6px;
+    left: 50%;
+    margin-left: -7.5px;
+  }
+
+  &.bottomleft::before {
+    bottom: -6px;
+  }
+
+  &.bottomright::before {
+    bottom: -6px;
+    right: 15px;
+  }
+
+  &.bottomcenter::before {
+    bottom: -6px;
+    left: 50%;
+    margin-left: -7.5px;
+  }
+
+  &.lefttop::before {
+    left: -6px;
+    top: 15px;
+  }
+
+  &.leftbottom::before {
+    left: -6px;
+    bottom: 15px;
+  }
+
+  &.leftcenter::before {
+    left: -6px;
+    top: 50%;
+    margin-top: -7.5px;
+  }
+
+  &.righttop::before {
+    right: -6px;
+    top: 15px;
+  }
+
+  &.rightbottom::before {
+    right: -6px;
+    bottom: 15px;
+  }
+
+  &.rightcenter::before {
+    right: -6px;
+    top: 50%;
+    margin-top: -7.5px;
+  }
+
+  &.none::before {
+    display: none;
+  }
+}
+
+.popup-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  z-index: 9;
+}

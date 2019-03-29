@@ -29,7 +29,7 @@ function Block({
 Block.propTypes = {
   color: PropTypes.string,
   blockType: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 };
 
 Block.defaultProps = {
