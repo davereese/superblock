@@ -95,7 +95,6 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   editor: PropTypes.string,
-  childHeight: PropTypes.number,
   children: PropTypes.node,
 };
 
