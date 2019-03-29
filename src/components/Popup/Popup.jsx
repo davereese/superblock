@@ -2,8 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 /*
-  This component will display the logged in user's profile image.
-  If the user does not have a profile image, a default will be used.
+  This component handles configuring how a popup will be positioned
+  and if and where it will have a pointer.
  */
 function Popup({
   children,
