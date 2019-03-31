@@ -14,6 +14,10 @@ class Login extends React.Component {
     }
   }
 
+  componentDidMount() {
+    document.title = "Superblock | Log In";
+  }
+
   async loginUser() {
     try {
       const response = await axios.post('http://localhost:4000/api/login', {

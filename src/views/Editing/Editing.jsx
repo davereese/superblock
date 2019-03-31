@@ -32,6 +32,8 @@ class Editing extends React.Component {
     // query the block
     if (this.props.match.params.id) {
       this.queryBlock(this.props.match.params.id);
+    } else {
+      document.title = "Superblock";
     }
   }
 
@@ -39,8 +41,10 @@ class Editing extends React.Component {
     if (prevProps.match.params.id !== this.props.match.params.id && this.props.match.params.id) {
       this.queryBlock(this.props.match.params.id);
     } else if (prevProps.match.params.id && !this.props.match.params.id) {
+      document.title = "Superblock";
       this.resetBlock();
     } else if (prevProps.user !== null && this.props.user === null) {
+      document.title = "Superblock";
       this.resetBlock();
       this.props.history.push('/');
     }
@@ -49,6 +53,7 @@ class Editing extends React.Component {
   async queryBlock(blockId) {
     Block.queryBlock(blockId).then((res) => {
       if (res && !res.error) {
+        document.title = `Superblock | ${res.title}`;
         this.setState({
           content: res.content,
           title: res.title,
@@ -77,6 +82,7 @@ class Editing extends React.Component {
     } else {
       Block.updateBlock(this.props.match.params.id, this.state).then((res) => {
         if (!res) {
+          document.title = `Superblock | ${this.state.title}`;
           this.setState({unsaved: false});
         } else {
           // handle error

@@ -20,6 +20,7 @@ function Header({
 
   const handleLogout = (e) => {
     e.preventDefault();
+    setBadgeClicked(false);
     onLogout();
   }
 
