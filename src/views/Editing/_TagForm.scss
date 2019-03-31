@@ -13,5 +13,9 @@
     font-size: px-to-rem(11px);
     white-space: nowrap;
     float: left;
+
+    button {
+      width: auto;
+    }
   }
 }

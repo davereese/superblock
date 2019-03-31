@@ -222,6 +222,7 @@ class Editing extends React.Component {
             blockTitle={this.state.title}
             blockContent={this.state.content}
             language={this.state.language}
+            onCmdS={this.handleSaveBlock.bind(this)}
             onUpdate={handleUpdate}
           />
         </div>

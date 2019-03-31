@@ -36,7 +36,7 @@ function Popup({
         break;
       case 'bottom':
         popupPosition.top = `${coords[2] + 10}px`;
-        popupPosition.bottom = 'auto;'
+        popupPosition.bottom = 'auto';
         break;
       case 'left':
         popupPosition.left = 'auto';

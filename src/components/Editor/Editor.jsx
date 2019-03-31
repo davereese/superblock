@@ -151,6 +151,12 @@ class Editor extends React.Component {
         e.target.selectionStart = e.target.selectionEnd = caret.selectionStartPos + 1 + numberOfSpaces;
       }
 
+      /** HANDLE S KEY */
+      if (e.keyCode === 83) {
+        e.preventDefault();
+        this.props.onCmdS();
+      }
+
       // trigger the syntax highlighting
       textareaChange(e);
     }
@@ -246,6 +252,7 @@ Editor.propTypes = {
   blockTitle: PropTypes.string,
   blockContent: PropTypes.string,
   language: PropTypes.string,
+  onCmdS: PropTypes.func,
   onUpdate: PropTypes.func.isRequired,
 };
 
@@ -253,6 +260,7 @@ Editor.defaultProps = {
   blockTitle: '',
   blockContent: '',
   language: '',
+  onCmdS: () => {},
 };
 
 export default Editor;
