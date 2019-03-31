@@ -114,6 +114,13 @@ class Editor extends React.Component {
           // Retain the selection / set the caret
           e.target = editor.setCaretOrSelection('indent', e.target, oldContent, newContent, caret);
         }
+
+        /** HANDLE S KEY */
+        if (e.keyCode === 83) {
+          e.preventDefault();
+          this.props.onCmdS();
+        }
+
       } else if (this.state.shiftDown) {
 
         /** HANDLE TAB KEY SCEANRIO 1 **/
@@ -149,12 +156,6 @@ class Editor extends React.Component {
         e.target.value = newContent;
         // set caret position
         e.target.selectionStart = e.target.selectionEnd = caret.selectionStartPos + 1 + numberOfSpaces;
-      }
-
-      /** HANDLE S KEY */
-      if (e.keyCode === 83) {
-        e.preventDefault();
-        this.props.onCmdS();
       }
 
       // trigger the syntax highlighting
