@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 /*
   This component displays the Login page view and functionality.
@@ -60,7 +61,7 @@ class Login extends React.Component {
                 : null
             }
             <form action="">
-              <label form="username">Username</label><br />
+              <label htmlFor="username">Username</label><br />
               <input
                 type="text"
                 id="username"
@@ -69,7 +70,7 @@ class Login extends React.Component {
                 onChange={handleChange}
                 className={userError}
               /><br />
-              <label form="password">Password</label><br />
+              <label htmlFor="password">Password</label><br />
               <input
                 type="password"
                 id="password"
@@ -81,6 +82,7 @@ class Login extends React.Component {
                 type="submit"
                 onClick={handleLogin}
               >Submit</button>
+              <Link to="/signup" className="signup">Sign Up</Link>
             </form>
           </div>
         </div>
