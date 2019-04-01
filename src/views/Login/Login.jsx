@@ -3,9 +3,9 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 /*
-  This component displays the Login page view and functionality.
+  This component displays the Log in page view and functionality.
  */
-class Login extends React.Component {
+class LogIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,4 +91,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default LogIn;

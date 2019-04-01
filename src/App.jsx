@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Header from './components/Header/Header';
 import Editing from './views/Editing/Editing';
-import Login from './views/Login/Login';
+import LogIn from './views/LogIn/LogIn';
 import SignUp from './views/SignUp/SignUp';
 
 const date = new Date();
@@ -41,7 +41,7 @@ class App extends Component {
                 <Editing user={this.state.currentUser} {...props} />
               )} />
               <Route path="/login" exact render={props => (
-                <Login onLoginSuccess={handleLogIn} history={props.history} />
+                <LogIn onLoginSuccess={handleLogIn} history={props.history} />
               )} />
               <Route path="/signup" exact render={props => (
                 <SignUp onSignupSuccess={handleLogIn} history={props.history} />
