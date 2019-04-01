@@ -16,7 +16,7 @@ router.post(endpoint, async (req, res) => {
     const block = await blocks.create(req.body);
 
     // save block's ID to user
-    await users.addBlock(req.user.username, block.id);
+    await users.addBlock(req.user.id, block.id);
 
     return res.status(201).json(block);
   } catch (error) {
@@ -28,10 +28,11 @@ router.post(endpoint, async (req, res) => {
 router.get(`${endpoint}/:blockId`, async (req, res) => {
   const blockId = parseInt(req.params.blockId);
   const username = req.user.username;
+  const userId = req.user.id;
   
   try {
     // check to make sure current user has this id assigned to them
-    const userHasBlock = await users.hasBlock(username, blockId);
+    const userHasBlock = await users.hasBlock(userId, blockId);
 
     if (userHasBlock) {
       const block = await blocks.get(blockId);
@@ -48,10 +49,11 @@ router.get(`${endpoint}/:blockId`, async (req, res) => {
 router.put(`${endpoint}/:blockId`, async (req, res) => {
   const blockId = parseInt(req.params.blockId);
   const username = req.user.username;
+  const userId = req.user.id;
 
   try {
     // check to make sure current user has this id assigned to them
-    const userHasBlock = await users.hasBlock(username, blockId);
+    const userHasBlock = await users.hasBlock(userId, blockId);
 
     if (userHasBlock) {
       const block = await blocks.update(blockId, req.body);
@@ -68,15 +70,16 @@ router.put(`${endpoint}/:blockId`, async (req, res) => {
 router.delete(`${endpoint}/:blockId`, async (req, res) => {
   const blockId = parseInt(req.params.blockId);
   const username = req.user.username;
+  const userId = req.user.id;
 
   try {
     // check to make sure current user has this id assigned to them
-    const userHasBlock = await users.hasBlock(username, blockId);
+    const userHasBlock = await users.hasBlock(userId, blockId);
 
     if (userHasBlock) {
       await blocks.delete(blockId);
       // remove block's ID from user
-      await users.removeBlock(req.user.username, blockId);
+      await users.removeBlock(username, blockId);
       res.status(202).send();
     } else {
       throw `That block does not belong to ${username}`;

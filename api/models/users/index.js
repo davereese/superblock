@@ -51,7 +51,7 @@ const search = async (searchValue) => {
     searchColumn = 'id';
   }
   
-  users = await knex('users').where(searchColumn, searchValue)
+  users = await knex('users').where(searchColumn, searchValue);
 
   if (users.length > 0) {
     return users[0];
@@ -85,11 +85,13 @@ const create = async (request) => {
     user.token = token;
     
     // save user to db
-    await knex(name).insert(user);
+    const newUser = await knex(name).insert(user, [
+      'id', 'username', 'password', 'email', 'token'
+    ]);
 
-    return user;
+    return newUser[0];
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -108,11 +110,11 @@ const update = async (userId, requestBody) => {
   }
 };
 
-const hasBlock = async (username, blockId) => {
+const hasBlock = async (userId, blockId) => {
   try {
     const user = await knex(name)
       .first('blocks')
-      .where({username: username});
+      .where({id: userId});
     
     return user.blocks.includes(blockId);
   } catch (error) {
@@ -120,10 +122,10 @@ const hasBlock = async (username, blockId) => {
   }
 };
 
-const addBlock = async (username, blockId) => {
+const addBlock = async (userId, blockId) => {
   try {
     const usersBlocks = await knex(name)
-      .where({username: username})
+      .where({id: userId})
       .first('blocks')
       .then((row) => {
         return row.blocks !== null ? row.blocks : [];
@@ -132,17 +134,17 @@ const addBlock = async (username, blockId) => {
     usersBlocks.push(blockId);
 
     await knex(name)
-      .where({username: username})
+      .where({id: userId})
       .update({blocks: usersBlocks});
   } catch (error) {
     return error;
   }
 };
 
-const removeBlock = async (username, blockId) => {
+const removeBlock = async (userId, blockId) => {
   try {
     const usersBlocks = await knex(name)
-      .where({username: username})
+      .where({id: userId})
       .first('blocks')
       .then((row) => {
         return row.blocks !== null ? row.blocks : [];
@@ -152,7 +154,7 @@ const removeBlock = async (username, blockId) => {
     usersBlocks.splice(index, 1);
 
     await knex(name)
-      .where({username: username})
+      .where({id: userId})
       .update({blocks: usersBlocks});
   } catch (error) {
     return error;
