@@ -100,7 +100,7 @@ class SignUp extends React.Component {
                 onChange={handleChange}
                 className={`${requiredError} ${passError}`}
               />
-              <label htmlFor="password2">Repeat Password</label><br />
+              <label htmlFor="password2">Re-type Password</label><br />
               <input
                 type="password"
                 id="password2"
